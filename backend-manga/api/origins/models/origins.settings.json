@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "origins",
+  "info": {
+    "name": "origins"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "label": {
+      "type": "string"
+    },
+    "value": {
+      "type": "uid",
+      "targetField": "label"
+    },
+    "mangases": {
+      "via": "origin",
+      "collection": "mangas"
+    }
+  }
+}

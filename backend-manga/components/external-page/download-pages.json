@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_external_page_download_pages",
+  "info": {
+    "name": "downloadPages",
+    "icon": "align-center",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "text",
+      "required": true
+    },
+    "Type": {
+      "type": "enumeration",
+      "enum": [
+        "Online",
+        "Normal"
+      ],
+      "default": "Normal"
+    }
+  }
+}

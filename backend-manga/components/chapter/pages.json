@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_chapter_pages",
+  "info": {
+    "name": "pages",
+    "icon": "file-image"
+  },
+  "options": {},
+  "attributes": {
+    "page": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

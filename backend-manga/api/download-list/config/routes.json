@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/download-lists",
+      "handler": "download-list.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/download-lists/count",
+      "handler": "download-list.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/download-lists/:id",
+      "handler": "download-list.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/download-lists",
+      "handler": "download-list.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/download-lists/:id",
+      "handler": "download-list.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/download-lists/:id",
+      "handler": "download-list.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

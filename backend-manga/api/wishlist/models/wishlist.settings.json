@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wishlists",
+  "info": {
+    "name": "wishlist",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "plugin": "users-permissions",
+      "collection": "user"
+    },
+    "mangases": {
+      "collection": "mangas"
+    },
+    "wishs": {
+      "type": "json"
+    }
+  }
+}

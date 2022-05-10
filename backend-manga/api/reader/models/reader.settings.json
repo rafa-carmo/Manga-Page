@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "readers",
+  "info": {
+    "name": "reader",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "unique": true,
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "readers": {
+      "type": "json"
+    },
+    "onlyUpdate": {
+      "type": "boolean"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "download_lists",
+  "info": {
+    "name": "download-list",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "id_mal": {
+      "type": "string"
+    },
+    "id_anilist": {
+      "type": "string"
+    },
+    "image": {
+      "type": "text"
+    },
+    "mangas": {
+      "model": "mangas"
+    },
+    "downloadPages": {
+      "type": "component",
+      "repeatable": true,
+      "component": "external-page.download-pages"
+    }
+  }
+}

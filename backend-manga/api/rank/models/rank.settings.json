@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ranks",
+  "info": {
+    "name": "rank",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "cover": {
+      "type": "text"
+    },
+    "genres": {
+      "type": "text"
+    },
+    "url": {
+      "type": "text"
+    },
+    "rank": {
+      "type": "string",
+      "unique": false
+    }
+  }
+}

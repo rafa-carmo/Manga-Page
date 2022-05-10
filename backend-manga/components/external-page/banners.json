@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_external_page_banners",
+  "info": {
+    "name": "banners",
+    "icon": "images"
+  },
+  "options": {},
+  "attributes": {
+    "banners": {
+      "collection": "banners"
+    }
+  }
+}

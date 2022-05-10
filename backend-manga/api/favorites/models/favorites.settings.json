@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "favorites",
+  "info": {
+    "name": "favorites",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "unique": true,
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "mangases": {
+      "collection": "mangas"
+    }
+  }
+}

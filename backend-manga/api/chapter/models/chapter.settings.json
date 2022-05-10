@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "chapters",
+  "info": {
+    "name": "chapter",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "chapter": {
+      "type": "string",
+      "required": true
+    },
+    "scan": {
+      "via": "chapters",
+      "model": "scan"
+    },
+    "pages": {
+      "type": "component",
+      "repeatable": true,
+      "component": "chapter.pages"
+    },
+    "mangas": {
+      "model": "mangas"
+    },
+    "createdAt": {
+      "type": "datetime"
+    }
+  }
+}

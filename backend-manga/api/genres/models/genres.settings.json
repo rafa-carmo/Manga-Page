@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "genres",
+  "info": {
+    "name": "genres",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "value": {
+      "type": "uid",
+      "required": true,
+      "targetField": "label"
+    },
+    "mangases": {
+      "via": "genres",
+      "collection": "mangas"
+    }
+  }
+}

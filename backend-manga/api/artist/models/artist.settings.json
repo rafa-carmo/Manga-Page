@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "artists",
+  "info": {
+    "name": "artist",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "value": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "mangas": {
+      "via": "artists",
+      "model": "mangas"
+    }
+  }
+}

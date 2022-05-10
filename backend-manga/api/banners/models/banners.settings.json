@@ -1,0 +1,20 @@
+{
+  "kind": "collectionType",
+  "collectionName": "banners",
+  "info": {
+    "name": "banners",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "mangas": {
+      "unique": true,
+      "model": "mangas"
+    }
+  }
+}

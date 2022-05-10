@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "stories",
+  "info": {
+    "name": "Story"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "mangases": {
+      "via": "stories",
+      "collection": "mangas",
+      "dominant": true
+    }
+  }
+}
