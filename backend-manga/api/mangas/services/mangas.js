@@ -22,6 +22,7 @@ function Exception(e) {
 
 
  async function getByName(name, entityName, search) {
+   console.log(name)
   const item = await strapi.services[entityName].find({[search]: name})
   return item.length ? item[0] : null
 }
@@ -128,7 +129,7 @@ async function createManga(manga) {
       romajiName: manga.romajiName,
       originalName: manga.originalName,
       englishName: manga.englishName,
-      genres: await Promise.all(manga.genres.map((name)=> getByName(name, "genres", "label"))),
+      genres: await Promise.all(manga.genres.map(async (name)=> await getByName(name.trim(), "genres", "value"))),
       origin: await getByName(manga.origin, "origins", "label"),
       artists:  [await getByName(manga.artists[0], "artist", "name")],
       stories: [await getByName(manga.stories[0], "story", "name")],

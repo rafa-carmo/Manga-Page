@@ -35,5 +35,5 @@ export interface QueryUserFavorites_favoriteForUser {
 }
 
 export interface QueryUserFavorites {
-  favoriteForUser: QueryUserFavorites_favoriteForUser[];
+  favoriteForUser: (QueryUserFavorites_favoriteForUser | null)[];
 }

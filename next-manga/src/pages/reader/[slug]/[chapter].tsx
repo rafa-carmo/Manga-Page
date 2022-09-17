@@ -18,7 +18,6 @@ import {
   QueryChaptersPaths,
   QueryChaptersPathsVariables
 } from 'graphql/generated/QueryChaptersPaths'
-import { ChapterMapperWithoutRepeate } from 'utils/mappers'
 
 const apolloClient = initializeApollo()
 
@@ -67,11 +66,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       chapter: {
         title: data.chapter[0].mangas?.title,
-        chapters: ChapterMapperWithoutRepeate(data.chapters),
         slug: `${params!.slug}`,
         atualChapter: `${params!.chapter}`,
         pages: data.chapter[0].pages ? sortPages(data.chapter[0].pages) : [],
-
         id: data.chapter[0].id
       }
     },

@@ -15,17 +15,18 @@ export const QUERY_CHAPTER_PAGES = gql`
         page
       }
     }
+  }
+`
+
+export const QUERY_GET_CHAPTERS = gql`
+  query QueryGetChapters($slug: String) {
     chapters(where: { mangas: { slug: $slug } }, limit: 1000) {
       id
       chapter
-      scan {
-        id
-        scan
-        slug
-      }
     }
   }
 `
+
 export const QUERY_CHAPTERS_PATHS = gql`
   query QueryChaptersPaths($limit: Int) {
     chapters(limit: $limit) {

@@ -15,7 +15,7 @@ import { QueryFavorite_favorites_mangases } from 'graphql/generated/QueryFavorit
 
 import { ChapterProps } from 'components/ChaptersList'
 
-import { QueryChapterPages_chapters } from '../graphql/generated/QueryChapterPages'
+// import { QueryChapterPages_chapters } from '../graphql/generated/QueryChapterPages'
 import { xor } from 'lodash'
 
 import { QueryReaders_readers } from '../graphql/generated/QueryReaders'
@@ -145,12 +145,13 @@ export const FilterLists = (
   )
 }
 
-export const ChapterMapperWithoutRepeate = (
-  chapters: QueryChapterPages_chapters[]
-) => {
-  const values = chapters.map((chapter) => chapter.chapter)
-  return xor(values.sort())
-}
+// export const ChapterMapperWithoutRepeate = (
+//   chapters: QueryChapterPages_chapters[]
+// ) => {
+//   const values = chapters.map((chapter) => chapter.chapter)
+//   return xor(values.sort())
+// }
+
 
 export const ReaderListMapper = (
   chapters: QueryReaders_readers[] | null | undefined

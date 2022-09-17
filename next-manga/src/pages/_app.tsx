@@ -12,6 +12,7 @@ import { useApollo } from '../utils/apollo'
 import { FavoriteProvider } from 'hooks/use-favorite'
 import { ReaderProvider } from 'hooks/use-reader'
 import { WishlistProvider } from 'hooks/use-wish'
+import '/public/assets/global.css'
 
 function App({ Component, pageProps }: AppProps) {
   const client = useApollo(pageProps.initialApolloState)

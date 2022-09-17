@@ -25,23 +25,8 @@ export interface QueryChapterPages_chapter {
   pages: (QueryChapterPages_chapter_pages | null)[] | null;
 }
 
-export interface QueryChapterPages_chapters_scan {
-  __typename: "Scan";
-  id: string;
-  scan: string;
-  slug: string | null;
-}
-
-export interface QueryChapterPages_chapters {
-  __typename: "Chapter";
-  id: string;
-  chapter: string;
-  scan: QueryChapterPages_chapters_scan | null;
-}
-
 export interface QueryChapterPages {
   chapter: QueryChapterPages_chapter[];
-  chapters: QueryChapterPages_chapters[];
 }
 
 export interface QueryChapterPagesVariables {

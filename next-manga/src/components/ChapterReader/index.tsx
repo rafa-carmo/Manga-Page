@@ -2,7 +2,7 @@ import * as S from './styles'
 
 import { CaretLeft } from '@styled-icons/bootstrap/CaretLeft'
 import { CaretRight } from '@styled-icons/bootstrap/CaretRight'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import Slider, { SliderSettings } from 'components/Slider'
 import SlickSlider from 'react-slick'
@@ -14,10 +14,15 @@ import { useSession } from 'next-auth/client'
 // import Image from 'next/image'
 import { StringToNumberMapper } from '../../utils/mappers'
 import Selector from 'components/Selector'
+import { PageDropdown } from 'components/PageDropdown'
+import OrientationPageSwitcher, {Orientation} from 'components/OrientationPageSwitcher';
+import { useQuery } from '@apollo/client'
+import { QUERY_GET_CHAPTERS } from 'graphql/queries/chapter'
+import { QueryGetChaptersVariables, QueryGetChapters } from '../../graphql/generated/QueryGetChapters';
+import Loading from 'templates/Loading'
 
 export type ChapterReaderProps = {
   title: string
-  chapters: string[]
   atualChapter: string
   pages: string[]
   readerMode?: 'vertical' | 'horizontal'
@@ -27,28 +32,39 @@ export type ChapterReaderProps = {
 
 const ChapterReader = ({
   title,
-  chapters,
   pages,
   readerMode = 'vertical',
   slug,
   id
 }: ChapterReaderProps) => {
   const { query, push } = useRouter()
-  if (chapters) {
-    StringToNumberMapper(chapters)
-  }
+  // if (chapters) {
+  //   StringToNumberMapper(chapters)
+  // }
+
+
+  const { data } = useQuery<QueryGetChapters, QueryGetChaptersVariables>(QUERY_GET_CHAPTERS, {
+    variables: {
+      slug
+    },
+    fetchPolicy: 'network-only'
+  })
+
   const [mode, setMode] = useState(readerMode)
   const [slide, setSlide] = useState(0)
   const [atualPage, setAtualPage] = useState(0)
   const [atualChapter, setAtualChapter] = useState(String(query.chapter))
+  const [chapters, setChapters] = useState<string[] | null>(null)
 
   //creating the ref
   const slider = useRef<SlickSlider>(null)
 
-  const handleModeChanger = (value: string) => {
+  const handleModeChanger = (value: Orientation) => {
     if (value === 'vertical') {
       setMode('vertical')
-    } else if (value === 'horizontal') {
+      return
+    } 
+    if (value === 'horizontal') {
       setSlide(0)
       setAtualPage(0)
       setMode('horizontal')
@@ -124,82 +140,81 @@ const ChapterReader = ({
     }
   }
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+
+      const orientation = localStorage.getItem("orientation");
+      if (orientation) {
+          setMode(orientation as Orientation);
+          return
+      }
+      
+      }
+    setMode('vertical')
+    
+  }, [])
+  
+  useEffect(() => {
+    data && setChapters(data?.chapters.map((chapter) => chapter.chapter))
+  }, [data, slug])
+
+
   return (
     <S.Wrapper>
       <S.ChapterInfoContainer>
-        {/* <S.Select
-          defaultValue={atualChapter}
-          onChange={(e) => handleChange(e.target.value)}
-        >
-          {chapters.map((chapter) => {
-            return (
-              <option value={chapter} key={`capitulo-${chapter}`}>
-                Capitulo {chapter}
-              </option>
-            )
-          })}
-        </S.Select> */}
-        <Selector
-          select={atualChapter}
-          options={chapters}
-          preText="Capitulo"
-          onChange={(e) => handleChange(e.target.value)}
-        />
-        <S.ReaderModeColtroller>
-          <Selector
-            select={mode}
-            options={['vertical', 'horizontal']}
-            onChange={(e) => handleModeChanger(e.target.value)}
-          />
-          {/* <S.Select value={mode} onChange={handleModeChanger}>
-            <option value="vertical">Pagina Inteira</option>
-            <option value="horizontal">Passar Paginas</option>
-          </S.Select> */}
-        </S.ReaderModeColtroller>
-      </S.ChapterInfoContainer>
-      {mode === 'horizontal' && (
-        <S.PageController>
-          <>
-            {slide !== 0 && (
-              <CaretLeft
-                size={24}
-                color="#FFF"
-                role="button"
-                onClick={goToPrev}
-              />
-            )}
-            <S.Select
-              value={atualPage}
-              onChange={(e) => goToPage(e.target.value)}
-            >
-              {pages.map((page, index) => (
-                <option key={`pagina-${page}`} value={index}>
-                  Pagina - {index + 1}
-                </option>
-              ))}
-            </S.Select>
-            {slide + 1 !== pages.length && (
-              <CaretRight
-                size={24}
-                color="#FFF"
-                role="button"
-                onClick={goToNext}
-              />
-            )}
-          </>
-        </S.PageController>
-      )}
+        {chapters ? (
+          <PageDropdown chapters={chapters} selectedChapter={atualChapter} onChange={(changed) => handleChange(changed)}/>
+        ) : (<Loading />) }
+        
+        {/* <PageDropdown chapters={pages} selectedChapter='0' onChange={goToPage} /> */}
 
+          {mode === 'horizontal' && (
+          <S.PageController>
+            <>
+              {slide !== 0 && (
+                <CaretLeft
+                  size={24}
+                  color="#FFF"
+                  role="button"
+                  onClick={goToPrev}
+                />
+              )}
+              <S.Select
+              className="text-zinc-800"
+                value={atualPage}
+                onChange={(e) => goToPage(e.target.value)}
+              >
+                {pages.map((page, index) => (
+                  <option className="text-zinc-800" key={`pagina-${page}`} value={index}>
+                    Pagina - {index + 1}
+                  </option>
+                ))}
+              </S.Select>
+              {slide + 1 !== pages.length && (
+                <CaretRight
+                  size={24}
+                  color="#FFF"
+                  role="button"
+                  onClick={goToNext}
+                />
+              )}
+            </>
+          </S.PageController>
+        )}
+
+
+        <OrientationPageSwitcher orientation={mode} setOrientation={handleModeChanger} />
+
+      </S.ChapterInfoContainer>
+     
+
+   
+  
       <S.PagesContent readerMode={mode}>
         {mode === 'vertical' ? (
           pages.map((page, index) => (
             <div key={`${title}-pagina-${index}`}>
-              {/* <Image
-                src={page}
-                aria-label={title}
-                layout="fill"
-                object-fit="cover"
-              /> */}
+
               <S.Page alt={title} src={page} />
             </div>
           ))
@@ -217,6 +232,9 @@ const ChapterReader = ({
         )}
       </S.PagesContent>
       <BottomScrollListener onBottom={onBottomReader}>
+        {chapters ? (
+
+        
         <S.PageController>
           <Button
             as="button"
@@ -256,6 +274,7 @@ const ChapterReader = ({
             </>
           )}
         </S.PageController>
+        ) : (<Loading />)}
       </BottomScrollListener>
     </S.Wrapper>
   )

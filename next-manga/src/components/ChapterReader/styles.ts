@@ -53,6 +53,7 @@ export const ChapterInfoContainer = styled.div`
     width: 50%;
     display: flex;
     justify-content: space-between;
+    padding: 2rem 0;
     ${media.lessThan('medium')`
     justify-content: center;
     flex-direction: column;

@@ -1,6 +1,6 @@
 import ChapterReader, {
   ChapterReaderProps
-} from 'components/ChapterReader/index'
+} from 'components/ChapterReader'
 import Base from 'templates/Base'
 import Head from 'next/head'
 

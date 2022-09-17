@@ -73,13 +73,14 @@ module.exports = {
 
   async createChapeterApi(params) {
     const mangas = await getByName(params.title, "mangas", 'title')
-
+    console.log(mangas)
 
     if(mangas){
       const chapter = await strapi.services.chapter.find({mangas:mangas.id, chapter: `${params.chapter}`})
 
       if(chapter.length <= 0) {
-        let scan = await getByName(params.scan, 'scan', 'scan')
+        let scan = await getByName(slugify(params.scan, {lower: true}), 'scan', 'scan')
+
         if(!scan){
           scan = await strapi.services.scan.create({scan: params.scan, slug: slugify(params.scan, {lower: true})})
         }

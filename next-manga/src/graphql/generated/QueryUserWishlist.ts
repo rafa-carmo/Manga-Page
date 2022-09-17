@@ -35,5 +35,5 @@ export interface QueryUserWishlist_wishlistForUser {
 }
 
 export interface QueryUserWishlist {
-  wishlistForUser: QueryUserWishlist_wishlistForUser[];
+  wishlistForUser: (QueryUserWishlist_wishlistForUser | null)[];
 }

@@ -21,7 +21,7 @@
         "Online",
         "Normal"
       ],
-      "default": "Normal"
+      "default": "Online"
     }
   }
 }

@@ -30,13 +30,14 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
     data.genres
   )
 
-  await apolloClient.query<QueryPageMangas, QueryPageMangasVariables>({
-    query: QUERY_PAGE_MANGAS,
-    variables: {
-      where: parseQueryStringToWhere({ queryString: query, filterItems }),
-      sort: 'title:Asc'
-    }
-  })
+  // await apolloClient.query<QueryPageMangas, QueryPageMangasVariables>({
+  //   query: QUERY_PAGE_MANGAS,
+  //   variables: {
+  //     where: parseQueryStringToWhere({ queryString: query, filterItems }),
+  //     sort: 'title:Asc',
+  //     limit: 5
+  //   }
+  // })
 
   return {
     props: {
