@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  downloader:
+    build: .
+    volumes:
+      - ./downloads.json:/downloader/downloads.json
+    command: python main.py
+    restart: always

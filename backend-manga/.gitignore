@@ -1,6 +1,8 @@
 node_modules
 build
 .cache
+cache
+postgresql
 *.log
 .env
 public/uploads/**

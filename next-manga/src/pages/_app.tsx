@@ -15,7 +15,7 @@ import { WishlistProvider } from 'hooks/use-wish'
 import '/public/assets/global.css'
 
 function App({ Component, pageProps }: AppProps) {
-  const client = useApollo(pageProps.initialApolloState)
+  const client = useApollo(pageProps.initialApolloState || {})
   return (
     <AuthProvider session={pageProps.session}>
       <ApolloProvider client={client}>

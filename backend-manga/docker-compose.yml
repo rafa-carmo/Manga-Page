@@ -1,0 +1,56 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:14.1-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=147258
+      - POSTGRES_DB=backendmanganext
+    container_name: postgres_mangas
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+
+
+  cache:
+    container_name: redis
+    image: redis:7.0.4-alpine
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+    volumes:
+      - cache:/redis/cache
+
+  backend:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "1337:1337"
+    command: yarn start
+    environment:
+      REDIS_PORT: 6379
+    volumes:
+      - ./public:/usr/backend/public
+    restart: always
+    links:
+      - cache
+      - db
+volumes:
+  cache:
+    driver: local
+  db:
+    driver: local
+  backend:
+    driver: local

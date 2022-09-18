@@ -26,7 +26,10 @@ export default function Index(props: MangaTemplateProps) {
 
 export async function getStaticPaths() {
   const { data } = await apolloClient.query<QueryMangas, QueryMangasVariables>({
-    query: QUERY_MANGAS
+    query: QUERY_MANGAS,
+    variables: {
+      limit: 5
+    }
   })
 
   const paths = data.mangas.map(({ slug }) => ({

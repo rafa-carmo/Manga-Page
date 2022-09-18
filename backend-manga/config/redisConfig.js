@@ -1,7 +1,9 @@
 const Redis = require('ioredis')
-const {promisify} = require('util')
+const { promisify } = require('util')
 
-const redisClient = new Redis()
+const redisClient = new Redis({
+  host: process.env.REDIS_HOST
+})
 
 function getRedis(value){
 

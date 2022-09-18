@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withPWA = require('next-pwa')
+const path = require('path')
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -15,10 +16,9 @@ module.exports = withPWA({
   output: 'standalone',
   staticPageGenerationTimeout: 150,
   experimental: {
-    outputStandalone: true,
+    outputStandalone: true
   },
   typescript: {
     ignoreBuildErrors: true,
-  }
-
+  },
 })
