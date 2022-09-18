@@ -1,0 +1,5 @@
+{
+    "baseDir": "F:/Users/Rafael/Documents/Programacao/Node/Next/manga/backend-manga/public/uploads/mangas",
+    "databaseUrl": "http://192.168.5.25:1337/graphql",
+    "databaseHost": "192.168.5.25"
+}
