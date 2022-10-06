@@ -1,8 +1,11 @@
 import { GetServerSidePropsContext } from 'next'
-import { getSession } from 'next-auth/client'
+import { useSession } from "next-auth/react"
+
 
 async function protectedRoutes(context: GetServerSidePropsContext) {
-  const session = await getSession(context)
+  const { data: session } = useSession()
+  // const csrfToken = await getCsrfToken(context)
+
 
   if (!session) {
     context.res.writeHead(302, {

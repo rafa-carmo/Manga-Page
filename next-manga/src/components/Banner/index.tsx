@@ -1,6 +1,7 @@
 import Button from 'components/Button'
 import * as S from './styles'
 import Link from 'next/link'
+import Image from 'next/image'
 // import Image from 'next/image'
 
 export type BannerProps = {
@@ -21,7 +22,17 @@ const Banner = ({
   buttonLabel = 'Ir para pagina'
 }: BannerProps) => (
   <S.Wrapper>
-    <S.Image src={img} aria-label={title} />
+    <S.ImageContainer>
+    {/* <S.Image src={img} aria-label={title} /> */}
+    <Image 
+      src={img} 
+      aria-label={title}
+      layout="fill"
+      objectFit="cover"
+      placeholder="blur"
+      blurDataURL={img} 
+      />
+    </S.ImageContainer>
     {hasMask && <S.Mask />}
     {sinopse && (
       <S.Caption>

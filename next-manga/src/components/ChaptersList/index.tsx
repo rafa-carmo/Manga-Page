@@ -6,7 +6,7 @@ import 'dayjs/locale/pt-br'
 import Link from 'next/link'
 import Spinner from 'components/Spinner'
 import CheckReaderButton from 'components/CheckReaderButton'
-import { useSession } from 'next-auth/client'
+import { useSession } from "next-auth/react"
 
 dayjs.extend(relativeTime)
 dayjs.locale('pt-br')
@@ -25,7 +25,7 @@ export type ChaptersListProps = {
 }
 
 const ChaptersList = ({ items, slug, loading }: ChaptersListProps) => {
-  const [session] = useSession()
+  const { data: session } = useSession()
   return (
     <S.Wrapper>
       {items?.map((chapter) => (

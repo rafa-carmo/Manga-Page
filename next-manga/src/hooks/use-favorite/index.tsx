@@ -1,6 +1,6 @@
 import { useQueryFavorite } from 'graphql/queries/favorite'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { useSession } from 'next-auth/client'
+import { useSession } from "next-auth/react"
 import { MangaCardProps } from '../../components/MangaCard/index'
 import { MangaCardMapper } from '../../utils/mappers'
 import { QueryFavorite_favorites_mangases } from 'graphql/generated/QueryFavorite'
@@ -33,7 +33,7 @@ export type FavoriteProviderProps = {
 }
 
 const FavoriteProvider = ({ children }: FavoriteProviderProps) => {
-  const [session] = useSession()
+  const { data: session } = useSession()
 
   const [favoriteListId, setFavoriteListId] = useState<string | null>()
   const [favoriteItems, setFavoriteItems] = useState<

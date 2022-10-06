@@ -7,7 +7,7 @@ import React from 'react'
 import Button from 'components/Button'
 import { FormWrapper, FormLink } from 'components/Form'
 import { useState } from 'react'
-import { signIn } from 'next-auth/client'
+import { signIn } from "next-auth/react"
 import { useRouter } from 'next/router'
 import { FormLoading } from '../Form/index'
 import { FieldErrors, signInValidate } from 'utils/validations'
@@ -33,6 +33,7 @@ const FormSignIn = () => {
     event.preventDefault()
     setLoading(true)
 
+
     const errors = signInValidate(values)
 
     if (Object.keys(errors).length) {
@@ -41,14 +42,14 @@ const FormSignIn = () => {
       return
     }
     setFieldError({})
-
+    
     const result = await signIn('credentials', {
       redirect: false,
       ...values,
       callbackUrl: `${window.location.origin}${query?.callbackUrl || '/'}`
     })
     if (result?.url) {
-      return push(result?.url)
+      return push(result.url)
     }
     setLoading(false)
 

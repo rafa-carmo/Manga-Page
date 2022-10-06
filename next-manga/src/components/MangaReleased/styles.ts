@@ -5,6 +5,7 @@ export const Wrapper = styled.main`
   display: flex;
   flex-direction: column;
   max-width: 90rem;
+
   ${media.lessThan('medium')`
     width: 100%;
   `}
@@ -16,6 +17,7 @@ export const CoverContainer = styled.div`
     align-items: center;
     padding-left: 1rem;
     text-decoration: none;
+    gap: 1rem;
   }
 `
 
@@ -36,6 +38,7 @@ export const Title = styled.h3`
     ${media.lessThan('medium')`
     font-size: ${theme.font.sizes.medium};
     line-height: ${theme.font.sizes.large};
+    flex: 1;
   `}
   `}
 `

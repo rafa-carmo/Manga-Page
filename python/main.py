@@ -159,13 +159,13 @@ def registerChapters(chapter, title, existedId=False):
         }
       }
 
-      updated = requests.post(f'${defaultUrl}graphql', json={'query': mutation, 'variables': variables})
+      updated = requests.post(f'{defaultUrl}graphql', json={'query': mutation, 'variables': variables})
       if(updated.status_code == 200):
         return True
       return False
 
     if(len(chapterDict['chapterPages']) > 1):
-        request = requests.post(f'${defaultUrl}chapters/updateChapters/', json=chapterDict)
+        request = requests.post(f'{defaultUrl}chapters/updateChapters/', json=chapterDict)
     else:
         return False
     if(request.status_code != 500):
@@ -254,7 +254,7 @@ def downloadChapter(chapter, title):
     chapterDict['createdAt'] = chapter['date']
 
     if(len(chapterDict['chapterPages']) > 1):
-        request = requests.post(f'${defaultUrl}chapters/updateChapters/', json=chapterDict)
+        request = requests.post(f'{defaultUrl}chapters/updateChapters/', json=chapterDict)
 
     if(request.status_code != 500):
         return True
@@ -365,7 +365,7 @@ def updateDownloadList(data):
             }
         }
     }
-    request = requests.post(f'${defaultUrl}graphql', json={'query': mutation, 'variables': variables})
+    request = requests.post(f'{defaultUrl}graphql', json={'query': mutation, 'variables': variables})
 
     if request.status_code == 200:
         return request.json()
@@ -449,7 +449,7 @@ def downloader():
                 }
               }
             }
-            request = requests.post(f'${defaultUrl}graphql', json={'query': mutation_remove, 'variables': variables_remove})
+            request = requests.post(f'{defaultUrl}graphql', json={'query': mutation_remove, 'variables': variables_remove})
 
             mutation_update_complete = """
                 mutation UpdateMangaComplete($input: updateMangasInput){

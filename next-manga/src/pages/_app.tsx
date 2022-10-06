@@ -3,7 +3,8 @@ import Head from 'next/head'
 
 import { ThemeProvider } from 'styled-components'
 import { ApolloProvider } from '@apollo/client'
-import { Provider as AuthProvider } from 'next-auth/client'
+
+import { SessionProvider as AuthProvider } from "next-auth/react"
 
 import NextNprogress from 'nextjs-progressbar'
 import GlobalStyles from 'styles/global'

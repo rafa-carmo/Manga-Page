@@ -3,7 +3,7 @@ import Footer from 'components/Footer'
 import { MangaCardProps } from 'components/MangaCard'
 import Menu from 'components/Menu'
 import ScrollToTop from 'components/ScrollToTop'
-import { useSession } from 'next-auth/client'
+import { useSession } from "next-auth/react"
 
 import * as S from './styles'
 
@@ -13,10 +13,10 @@ export type BaseTemplateProps = {
 }
 
 const Base = ({ children, manga }: BaseTemplateProps) => {
-  const [session, loading] = useSession()
+  const { data: session, status: loading} = useSession()
   return (
     <S.Wrapper>
-      <Menu username={session?.user?.name} loading={loading} manga={manga} />
+      <Menu username={session?.user?.name} loading={loading === 'loading'} manga={manga} />
 
       <S.Content>{children}</S.Content>
 

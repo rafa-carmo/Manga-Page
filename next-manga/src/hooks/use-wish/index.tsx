@@ -1,6 +1,6 @@
 import { MangaCardProps } from 'components/MangaCard'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { useSession } from 'next-auth/client'
+import { useSession } from "next-auth/react"
 import { useQueryWishlist } from '../../graphql/queries/wishlist'
 import { MangaCardMapper } from '../../utils/mappers'
 import { QueryWishlist_wishlists_mangases } from 'graphql/generated/QueryWishlist'
@@ -34,7 +34,7 @@ export type WishlistProviderProps = {
 }
 
 const WishlistProvider = ({ children }: WishlistProviderProps) => {
-  const [session] = useSession()
+  const { data: session } = useSession()
 
   const [wishlistItems, setWishlistItems] = useState<
     QueryWishlist_wishlists_mangases[]

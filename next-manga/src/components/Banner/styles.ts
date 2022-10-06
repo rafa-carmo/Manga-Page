@@ -27,6 +27,18 @@ export const Image = styled.div<ImageProps>`
   `}
 `
 
+export const ImageContainer = styled.div`
+${({ theme }) => css`
+    width: 100%;
+    height: 23rem;
+    background-color: ${theme.colors.lightGray};
+    position: relative;
+    ${media.greaterThan('medium')`
+    height:48rem;
+  `}
+  `}
+`
+
 export const Mask = styled.div`
   ${({ theme }) => css`
     width: 100%;

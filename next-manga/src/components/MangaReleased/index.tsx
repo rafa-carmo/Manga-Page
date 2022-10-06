@@ -41,7 +41,7 @@ const MangaReleased = ({ slug, title, img, chapters }: MangaReleasedProps) => {
                 object-fit="cover"
               />
             </S.CoverWrapper>
-            <S.Title>{title}</S.Title>
+            <S.Title>{title || "Desconhecido"}</S.Title>
           </a>
         </Link>
       </S.CoverContainer>

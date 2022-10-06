@@ -1,10 +1,10 @@
 import { GetServerSidePropsContext } from 'next'
 import ProfileMenuTemplate from 'templates/ProfileMenu'
 import protectedRoutes from 'utils/protected-routes'
-import { useSession } from 'next-auth/client'
+import { useSession } from "next-auth/react"
 
 export default function ProfileMenu() {
-  const [session] = useSession()
+  const { data: session } = useSession()
   return (
     <div>
       <ProfileMenuTemplate name={session!.user!.name} />

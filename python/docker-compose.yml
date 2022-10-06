@@ -4,5 +4,6 @@ services:
     build: .
     volumes:
       - ./downloads.json:/downloader/downloads.json
+      - ./settings.json:/downloader/settings.json
     command: python main.py
     restart: always

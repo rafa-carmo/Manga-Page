@@ -1,67 +1,66 @@
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import { NextApiRequest, NextApiResponse } from 'next'
-import NextAuth from 'next-auth'
-import Providers from 'next-auth/providers'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type GenericObject = { [key: string]: any }
 
-const options = {
+export default NextAuth({
   pages: {
     signIn: '/sign-in'
   },
   providers: [
-    Providers.Credentials({
-      name: 'Sign-in',
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: { label: "email", type: "text " },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        
+        if(!credentials?.email || !credentials?.password) {
+          return null
+        }
 
-      credentials: {},
-      async authorize({
-        email,
-        password
-      }: {
-        email: string
-        password: string
-      }) {
+        const { email, password } = credentials
+
+
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/local`,
+          `http://192.168.5.25:1337/auth/local`,
           {
             method: 'POST',
             body: new URLSearchParams({ identifier: email, password })
           }
         )
+ 
 
         const data = await response.json()
-
         if (data.user) {
-          return { ...data.user, jwt: data.jwt }
+          const returnData = { name: data.user.username, ...data.user, jwt: data.jwt }
+          console.log(returnData)
+          return returnData
         } else {
           return null
         }
-      }
-    })
+      },
+    }),
   ],
   callbacks: {
-    session: async (session: GenericObject, user: GenericObject) => {
-      session.jwt = user.jwt
-      session.id = user.id
-
-      return Promise.resolve(session)
+    async session({ session, token }) {
+      session.id = token.id;
+      session.jwt = token.jwt;
+      return Promise.resolve(session);
     },
-
-    jwt: async (token: GenericObject, user: GenericObject) => {
-      if (user) {
-        token.id = user.id
-        token.email = user.email
-        token.name = user.username
-        token.jwt = user.jwt
+    async jwt({ token, user }: GenericObject) {
+      const isSignIn = user ? true : false
+      if (isSignIn) {
+ 
+          token.id = user.id
+          token.email = user.email
+          token.name = user.username
+          token.jwt = user.jwt
+        
       }
-
-      return Promise.resolve(token)
-    }
-  }
-}
-
-const Auth = (req: NextApiRequest, res: NextApiResponse) => {
-  NextAuth(req, res, options)
-}
-
-export default Auth
+      return Promise.resolve(token);
+    },
+  },
+})

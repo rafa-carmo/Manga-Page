@@ -10,16 +10,16 @@ RUN yarn --frozen-lockfile
 FROM node:14.20.0-alpine3.16 AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY /package.json .
-COPY /public ./public
-COPY /src ./src
-COPY /next.config.prod.js ./next.config.js
-COPY /postcss.config.js .
-COPY /tailwind.config.js .
-COPY /tsconfig.json .
-COPY /next-env.d.ts .
-COPY /.env.prod ./.env
-COPY /styled-components.d.ts .
+COPY ./package.json .
+COPY ./public ./public
+COPY ./src ./src
+COPY ./next.config.prod.js ./next.config.js
+COPY ./postcss.config.js .
+COPY ./tailwind.config.js .
+COPY ./tsconfig.json .
+COPY ./next-env.d.ts .
+COPY ./.env.prod ./.env
+COPY ./styled-components.d.ts .
 
 RUN yarn build
 

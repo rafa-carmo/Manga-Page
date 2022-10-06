@@ -24,7 +24,7 @@ def verifyIsLocal(slug, chapter):
     "chapter": chapter
   }
 
-  chapters = requests.post(f'{settings["databaseHost"]}:1337/graphql', json={'query': query, 'variables': variables}).json()
+  chapters = requests.post(f'http://{settings["databaseHost"]}:1337/graphql', json={'query': query, 'variables': variables}).json()
 
   try:
     if('http' not in chapters['data']['chapters'][0]['pages'][0]['page']):
@@ -234,7 +234,7 @@ def getMangaLocal(title):
         "search": title
     }
 
-    manga = requests.post(f'{settings["databaseHost"]}:1337/graphql', json={'query': query, 'variables': variables})
+    manga = requests.post(f'http://{settings["databaseHost"]}:1337/graphql', json={'query': query, 'variables': variables})
     if(manga.status_code == 200):
         return manga.json()['data']['mangases']
     return None
@@ -263,7 +263,7 @@ def createDownloadList(data):
         }
     }
 
-    request = requests.post(f'{settings["databaseHost"]}:1337/graphql', json={'query': mutation, 'variables': variables})
+    request = requests.post(f'http://{settings["databaseHost"]}:1337/graphql', json={'query': mutation, 'variables': variables})
     return request
 
 

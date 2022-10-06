@@ -1,10 +1,11 @@
 import * as S from './styles'
 import { CheckmarkOutline as CheckIcon } from '@styled-icons/evaicons-outline/CheckmarkOutline'
-import { useSession } from 'next-auth/client'
+import { useSession } from "next-auth/react"
 import FavoriteButton from 'components/FavoriteButton'
 import { useReader } from 'hooks/use-reader'
 import WishlistButton from 'components/WishlistButton'
 import Spinner from 'components/Spinner'
+import { useState } from 'react'
 // import Image from 'next/image'
 export type CoverProps = {
   id: string
@@ -15,7 +16,8 @@ export type CoverProps = {
 }
 
 const Cover = ({ id, img, title, chaptersInfoIds }: CoverProps) => {
-  const [session] = useSession()
+  const { data: session } = useSession()
+
   const { addToReader, removeFromReader, isAllRead, loading } = useReader()
   const handleReader = () => {
     isAllRead(chaptersInfoIds!)
@@ -36,6 +38,7 @@ const Cover = ({ id, img, title, chaptersInfoIds }: CoverProps) => {
       </S.ImageWrapper>
 
       {session && (
+        <>
         <S.ButtonsContainer>
           <WishlistButton id={id} />
           {loading ? (
@@ -52,6 +55,10 @@ const Cover = ({ id, img, title, chaptersInfoIds }: CoverProps) => {
           )}
           <FavoriteButton id={id} />
         </S.ButtonsContainer>
+        <div className="w-full bg-lime-800 text-zinc-200" >
+          Recomendar
+        </div>
+          </>
       )}
     </S.Wrapper>
   )

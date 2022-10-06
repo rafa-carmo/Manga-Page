@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  frontend:
+    container_name: manga_dev
+    image: node:14.20.0-alpine3.16
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    restart: always
+    working_dir: /app
+    command:  sh -c "yarn && yarn dev"

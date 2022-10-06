@@ -10,7 +10,7 @@ import { useRouter } from 'next/router'
 import Button from 'components/Button'
 import { BottomScrollListener } from 'react-bottom-scroll-listener'
 import { useReader } from 'hooks/use-reader'
-import { useSession } from 'next-auth/client'
+import { useSession } from "next-auth/react"
 // import Image from 'next/image'
 import { StringToNumberMapper } from '../../utils/mappers'
 import Selector from 'components/Selector'
@@ -132,7 +132,7 @@ const ChapterReader = ({
     }
   }
 
-  const [session] = useSession()
+  const { data: session } = useSession()
   const { addToReader } = useReader()
   const onBottomReader = () => {
     if (session) {

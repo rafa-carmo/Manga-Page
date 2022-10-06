@@ -3,12 +3,13 @@ import Link from 'next/link'
 
 import Dropdown from 'components/Dropdown'
 
-import { UserCircle as AccountCircle } from '@styled-icons/fa-regular/UserCircle'
+// import { UserCircle as AccountCircle } from '@styled-icons/fa-regular/UserCircle'
 import { ChevronDown } from '@styled-icons/boxicons-solid/ChevronDown'
 import { Favorite } from '@styled-icons/material-outlined/Favorite'
 import { LogOut, BookAlt } from '@styled-icons/boxicons-regular'
-import { signOut } from 'next-auth/client'
+import { signOut } from 'next-auth/react'
 import MediaMatch from 'components/MediaMatch'
+import { UserCircle as AccountCircle } from 'phosphor-react'
 
 export type UserDropdownProps = {
   username: string

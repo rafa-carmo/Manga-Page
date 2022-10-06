@@ -4,7 +4,7 @@ export const formatImage = (url: string | undefined): string | undefined => {
   if (url?.includes('http')) {
     return url
   }
-  return `http://192.168.5.25:1337${url}`
+  return `${process.env.NEXT_PUBLIC_API_URL}${url}`
 }
 
 export function sortPages(pages: (QueryChapterPages_chapter_pages | null)[]) {

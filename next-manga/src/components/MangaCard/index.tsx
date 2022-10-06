@@ -4,6 +4,7 @@ import MangaCardTooltip, {
 import * as S from './styles'
 import { useRouter } from 'next/router'
 import MediaMatch from 'components/MediaMatch'
+import Image from 'next/image'
 
 // import Image from 'next/image'
 
@@ -59,19 +60,20 @@ const MangaCard = ({
             </S.TooltipContainer>
           )}
         </MediaMatch>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        {/* <img
           src={img ? img : 'images/folder.jpg'}
           aria-label={title}
           onClick={() => handleClick()}
-        />
-        {/* <Image
+        /> */}
+        <Image
           src={`${img}`}
           aria-label={title}
           layout="fill"
+          width={304}
+          height={400}
           object-fit="cover"
           onClick={() => handleClick()}
-        /> */}
+        />
       </S.ImageBox>
 
       <S.Title onClick={() => handleClick()}>{title}</S.Title>

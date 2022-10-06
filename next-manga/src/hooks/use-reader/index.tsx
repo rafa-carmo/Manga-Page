@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
-import { useSession } from 'next-auth/client'
+import { useSession } from "next-auth/react"
 import { useQueryReader } from 'graphql/queries/reader'
 import { ReaderListMapper } from 'utils/mappers'
 import { useMutation } from '@apollo/client'
@@ -36,7 +36,7 @@ export type ReaderProviderProps = {
 }
 
 const ReaderProvider = ({ children }: ReaderProviderProps) => {
-  const [session] = useSession()
+  const { data: session } = useSession()
 
   const [readersIds, setReadersIds] = useState<string[]>([])
   const [readerListId, setReaderListId] = useState<string | null>()
