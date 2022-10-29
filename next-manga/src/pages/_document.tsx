@@ -37,7 +37,11 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="pt-BR">
-        <Head />
+        <Head>
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="apple-touch-icon" href="/favicon.ico" />
+          <meta name="theme-color" content="#000000" />
+        </Head>
         <body>
           <Main />
           <NextScript />

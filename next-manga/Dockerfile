@@ -4,7 +4,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json yarn.lock* ./
-RUN yarn --frozen-lockfile
+RUN npm install
 
 # Rebuild the source code only when needed
 FROM node:14.20.0-alpine3.16 AS builder

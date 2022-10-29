@@ -1,21 +1,32 @@
 {
-  "name": "Projetct Next",
-  "short_name": "Next js",
-  "icons": [
-    {
-      "src": "/img/icon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/img/icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
-  "background_color": "#06092B",
-  "description": "Boilerplate utilizando Typescript, React, NextJS e Styled Components!",
-  "display": "fullscreen",
-  "start_url": "/",
-  "theme_color": "#06092B"
+    "theme_color": "#247BA0",
+    "background_color": "#363535",
+    "display": "browser",
+    "scope": "/",
+    "start_url": "/",
+    "name": "Manga Page",
+    "short_name": "MP",
+    "description": "Page of mangas",
+    "icons": [
+        {
+            "src": "/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
 }

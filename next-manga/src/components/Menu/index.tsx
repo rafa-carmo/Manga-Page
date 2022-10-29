@@ -1,5 +1,5 @@
 import * as S from './styles'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 import { Menu2 as MenuIcon } from '@styled-icons/remix-fill/Menu2'
 import { Close as CloseIcon } from '@styled-icons/material-outlined/Close'
@@ -13,6 +13,7 @@ import Button from 'components/Button'
 import UserDropdown from 'components/UserDropdown'
 import { MangaCardProps } from 'components/MangaCard'
 import { useRouter } from 'next/router'
+import { ModalContext } from 'hooks/add-manga'
 
 type MenuProps = {
   username?: string | null
@@ -23,6 +24,7 @@ type MenuProps = {
 const Menu: React.FC<MenuProps> = ({ username, color, loading, manga }) => {
   const [isOpen, setIsOpen] = useState(false)
   const { asPath } = useRouter()
+  const { setIsOpen: setModalIsOpen } = useContext(ModalContext)
 
   return (
     <S.Wrapper>
@@ -76,6 +78,11 @@ const Menu: React.FC<MenuProps> = ({ username, color, loading, manga }) => {
                 )}
               </>
             )}
+              <MediaMatch greaterThan="medium">
+                <Button type='button' onClick={()=>setModalIsOpen(true)}>
+                  Adicionar Manga
+                </Button>
+              </MediaMatch>
           </S.MenuGroup>
 
           <S.MenuFull aria-hidden={!isOpen} isOpen={isOpen}>
@@ -104,6 +111,7 @@ const Menu: React.FC<MenuProps> = ({ username, color, loading, manga }) => {
                   </MediaMatch>
                 </>
               )}
+  
             </S.MenuNav>
           </S.MenuFull>
         </S.MenuWrapper>

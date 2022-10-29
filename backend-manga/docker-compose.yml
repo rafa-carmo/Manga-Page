@@ -13,6 +13,10 @@ services:
       timeout: 5s
       retries: 5
     restart: always
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
     volumes:
       - ./postgresql:/var/lib/postgresql/data
 
@@ -27,30 +31,17 @@ services:
       timeout: 30s
       retries: 5
       start_period: 30s
-
+    expose:
+      - 6379
+    ports:
+      - 6379:6379
     volumes:
       - cache:/redis/cache
 
-  backend:
-    build: .
-    depends_on:
-      db:
-        condition: service_healthy
-    ports:
-      - "1337:1337"
-    command: yarn start
-    environment:
-      REDIS_PORT: 6379
-    volumes:
-      - ./public:/usr/backend/public
-    restart: always
-    links:
-      - cache
-      - db
+
 volumes:
   cache:
     driver: local
   db:
     driver: local
-  backend:
-    driver: local
+

@@ -8,6 +8,8 @@ export default NextAuth({
   pages: {
     signIn: '/sign-in'
   },
+  secret: process.env.NEXT_PUBLIC_SECRET,
+  
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -36,7 +38,6 @@ export default NextAuth({
         const data = await response.json()
         if (data.user) {
           const returnData = { name: data.user.username, ...data.user, jwt: data.jwt }
-          console.log(returnData)
           return returnData
         } else {
           return null

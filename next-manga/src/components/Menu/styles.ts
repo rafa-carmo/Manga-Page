@@ -50,6 +50,8 @@ export const MenuGroup = styled.div`
   justify-content: flex-end;
   align-items: center;
   color: white;
+  gap: 0.50rem;
+
 `
 
 export const MenuNav = styled.div`
