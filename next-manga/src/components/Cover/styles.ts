@@ -12,7 +12,7 @@ export const ButtonsContainer = styled.div`
   `}
 `
 export const ImageWrapper = styled.div`
-  width: 100%;
+  overflow: hidden;
   height: 100%;
 `
 

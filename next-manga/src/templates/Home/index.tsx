@@ -19,10 +19,8 @@ import { QUERY_RELEASE_CHAPTERS } from 'graphql/queries/home'
 import { MangaReleased } from 'utils/mappers'
 
 import Spinner from 'components/Spinner'
-import {
-  QueryReleasedChapters,
-  QueryReleasedChaptersVariables
-} from '../../graphql/generated/QueryReleasedChapters'
+import { useEffect, useState } from 'react';
+import { QueryReleasedChapters_chapters } from '../../graphql/generated/QueryReleasedChapters';
 
 export type HomeProps = {
   banners: BannerProps[]
@@ -31,17 +29,33 @@ export type HomeProps = {
 }
 
 const Home = ({ banners, newsBanners, ranks }: HomeProps) => {
-  const { data, loading, fetchMore } = useQuery<
-    QueryReleasedChapters,
-    QueryReleasedChaptersVariables
-  >(QUERY_RELEASE_CHAPTERS, {
-    notifyOnNetworkStatusChange: true,
-    variables: { limit: 20, start: 0 },
-    fetchPolicy: 'network-only'
-  })
+  const [data, setData] = useState<QueryReleasedChapters_chapters[]>([])
+  const [loading, setLoading] = useState(false)
+  // const { data, loading, fetchMore } = useQuery<
+  //   QueryReleasedChapters,
+  //   QueryReleasedChaptersVariables
+  // >(QUERY_RELEASE_CHAPTERS, {
+  //   notifyOnNetworkStatusChange: true,
+  //   variables: { limit: 20, start: 0 },
+  //   fetchPolicy: 'network-only'
+  // })
 
-  const handleShowMore = () => {
-    fetchMore({ variables: { limit: 20, start: data?.chapters.length } })
+  useEffect(() => {
+    setLoading(true)
+    fetch('/api/home')
+      .then((res) => res.json())
+      .then(data => {
+        setData(data)
+        setLoading(false)
+      })
+    return
+  }, [])
+
+  const handleShowMore = async () => {
+    setLoading(true)
+    const response = await (await fetch(`/api/home?start=${data?.length}&limit=20`)).json()
+    setData((data) => [...data, ...response])
+    setLoading(false)
   }
 
   return (
@@ -66,7 +80,7 @@ const Home = ({ banners, newsBanners, ranks }: HomeProps) => {
               Lançamentos
             </Heading>
 
-            <MangaReleasedList items={MangaReleased(data?.chapters)} />
+            <MangaReleasedList items={MangaReleased(data)} />
 
             <S.ShowMore>
               {loading ? (

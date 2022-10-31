@@ -6,6 +6,7 @@ import { useReader } from 'hooks/use-reader'
 import WishlistButton from 'components/WishlistButton'
 import Spinner from 'components/Spinner'
 import { useState } from 'react'
+import Image from 'next/image'
 // import Image from 'next/image'
 export type CoverProps = {
   id: string
@@ -34,7 +35,7 @@ const Cover = ({ id, img, title, chaptersInfoIds }: CoverProps) => {
           width={150}
           height={200}
         /> */}
-        <S.Image src={img} aria-label={title} />
+        <Image src={img} aria-label={title} layout="responsive" width={150} height={200} />
       </S.ImageWrapper>
 
       {session && (

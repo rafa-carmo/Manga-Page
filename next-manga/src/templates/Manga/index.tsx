@@ -15,10 +15,12 @@ import Base from 'templates/Base'
 import { ChapterMapper } from 'utils/mappers'
 import * as S from './styles'
 import Loading from 'templates/Loading'
+import { useEffect, useState } from 'react';
 import {
   QueryChaptersById,
   QueryChaptersByIdVariables
 } from 'graphql/generated/QueryChaptersById'
+import Image from 'next/image'
 
 export type MangaTemplateProps = {
   banner: BannerProps
@@ -35,27 +37,15 @@ const Manga = ({
   cardMangaInfo,
   slug
 }: MangaTemplateProps) => {
-  const { data, loading } = useQuery<
-    QueryChaptersById,
-    QueryChaptersByIdVariables
-  >(QUERY_CHAPTERS_BY_ID, {
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      id: parseInt(cover.id)
-    },
-    fetchPolicy: 'no-cache'
-  })
 
-  // if (!data) return <Loading />
-
-  // const onBottomShowMore = () => {
-  //   fetchMore({
-  //     variables: {
-  //       start: data?.chaptersInfo.length,
-  //       sort: 'chapter:asc'
-  //     }
-  //   })
-  // }
+  const [data, setData] = useState<QueryChaptersById | null>(null)
+  
+  useEffect(() => {
+    fetch(`/api/chapters?id=${cover.id}`)
+      .then((res) => res.json())
+      .then(data => setData(data))
+    return
+  }, [cover.id])
 
   return (
     <Base>
@@ -68,7 +58,16 @@ const Manga = ({
           content={`manga, manga online, ${mangaInfo.title}`}
         />
       </Head>
-      <S.Banner src={banner.img} area-label={banner.title} />
+      <S.Banner>
+          <Image
+          src={banner.img} 
+          layout="fill"
+          objectFit="cover"
+          placeholder="blur"
+          blurDataURL={banner.img} 
+           />
+          </S.Banner>
+      {/* <S.Banner src={banner.img} area-label={banner.title} /> */}
 
       <S.Main>
         <S.SectionCover>
@@ -86,26 +85,27 @@ const Manga = ({
         </S.SectionCover>
 
         <S.SectionChapters>
-          <div>
+      
             <CardMangaInfo
               {...cardMangaInfo}
               chapters={
                 data?.chaptersInfo ? `${data?.chaptersInfo?.length}` : '00'
               }
             />
-          </div>
+
           {!!data?.chaptersInfo && (
             <div>
-              <ChaptersList
-                loading={loading}
+              {
+              data ? (
+                <ChaptersList
+                loading={!data}
                 items={ChapterMapper(data?.chaptersInfo)}
                 slug={slug}
-              />
-              {/* {hasMore && (
-                <BottomScrollListener onBottom={onBottomShowMore}>
-                  <div></div>
-                </BottomScrollListener>
-              )} */}
+                />
+                ) 
+                : <Loading />
+                }
+
             </div>
           )}
         </S.SectionChapters>
