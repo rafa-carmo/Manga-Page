@@ -32,8 +32,6 @@ const FormSignIn = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     setLoading(true)
-
-
     const errors = signInValidate(values)
     
     if (Object.keys(errors).length) {
@@ -42,12 +40,15 @@ const FormSignIn = () => {
       return
     }
     setFieldError({})
-    
+
     const result = await signIn('credentials', {
       redirect: false,
       ...values,
       callbackUrl: `${window.location.origin}${query?.callbackUrl || '/'}`
     })
+
+    setLoading(false)
+
     if (result?.url) {
       return push(result.url)
     }

@@ -1,6 +1,5 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { NextApiRequest, NextApiResponse } from 'next'
 
 type GenericObject = { [key: string]: any }
 
@@ -27,7 +26,7 @@ export default NextAuth({
 
 
         const response = await fetch(
-          `http://192.168.5.25:1337/auth/local`,
+          `${process.env.API_URL}/auth/local`,
           {
             method: 'POST',
             body: new URLSearchParams({ identifier: email, password })
@@ -46,22 +45,25 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, token }) {
-      session.id = token.id;
-      session.jwt = token.jwt;
-      return Promise.resolve(session);
-    },
-    async jwt({ token, user }: GenericObject) {
-      const isSignIn = user ? true : false
-      if (isSignIn) {
- 
-          token.id = user.id
-          token.email = user.email
-          token.name = user.username
-          token.jwt = user.jwt
-        
+      async session({ session, token }) {
+        session.id = token.id;
+        session.jwt = token.jwt;
+        return Promise.resolve(session);
+      },
+      async jwt({ token, user }: GenericObject) {
+        const isSignIn = user ? true : false
+        if (isSignIn) {
+  
+            token.id = user.id
+            token.email = user.email
+            token.name = user.username
+            token.jwt = user.jwt
+          
+        }
+        return Promise.resolve(token);
+      },
+      async redirect({ url }) {
+          return url
       }
-      return Promise.resolve(token);
     },
-  },
 })

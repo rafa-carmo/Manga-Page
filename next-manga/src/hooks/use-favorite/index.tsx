@@ -62,10 +62,10 @@ const FavoriteProvider = ({ children }: FavoriteProviderProps) => {
   )
 
   const { data, loading: loadingQuery } = useQueryFavorite({
-    skip: !session?.user?.email,
+    skip: !session?.email,
     context: { session },
     variables: {
-      identifier: session?.user?.email as string
+      identifier: session?.email as string
     }
   })
 

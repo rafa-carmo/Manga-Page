@@ -1,20 +1,21 @@
 import { GetServerSidePropsContext } from 'next'
-import { useSession } from "next-auth/react"
+import { getToken } from 'next-auth/jwt'
 
 
 async function protectedRoutes(context: GetServerSidePropsContext) {
-  const { data: session } = useSession()
-  // const csrfToken = await getCsrfToken(context)
+  const token = await getToken({ req: context.req, secret: process.env.NEXT_PUBLIC_SECRET })
+  // const session = await getSession({req: context.req})
 
 
-  if (!session) {
+  // // console.log("🚀 ~ file: protected-routes.ts:8 ~ protectedRoutes ~ session", session)
+  if (!token) {
     context.res.writeHead(302, {
       location: `/sign-in?callbackUrl=${context.resolvedUrl}`
     })
     context.res.end()
   }
 
-  return session
+  return token
 }
 
 export default protectedRoutes
