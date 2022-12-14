@@ -2,8 +2,9 @@ import styled, { css } from 'styled-components'
 
 import { Description as DescriptionTooltipStyle } from 'components/MangaCardTooltip/styles'
 import media from 'styled-media-query'
+import Link from 'next/link';
 
-export const Wrapper = styled.main`
+export const Wrapper = styled(Link)`
   width: 100%;
   height: 100%;
   a {

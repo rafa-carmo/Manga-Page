@@ -5,6 +5,7 @@ import * as S from './styles'
 import { useRouter } from 'next/router'
 import MediaMatch from 'components/MediaMatch'
 import Image from 'next/image'
+import Link from 'next/link';
 
 // import Image from 'next/image'
 
@@ -33,12 +34,11 @@ const MangaCard = ({
 }: MangaCardProps) => {
   const router = useRouter()
 
-  const handleClick = () => {
-    url ? (document.location.href = url) : router.push(`/manga/${slug}`)
-  }
+
 
   return (
-    <S.Wrapper>
+    <Link href={`/manga/${slug}`}>
+      <a>
       <S.ImageBox>
         {!!update && (
           <S.Update>
@@ -72,12 +72,12 @@ const MangaCard = ({
           width={304}
           height={400}
           object-fit="cover"
-          onClick={() => handleClick()}
         />
       </S.ImageBox>
 
-      <S.Title onClick={() => handleClick()}>{title}</S.Title>
-    </S.Wrapper>
+      <S.Title>{title}</S.Title>
+    </a>
+    </Link>
   )
 }
 export default MangaCard
