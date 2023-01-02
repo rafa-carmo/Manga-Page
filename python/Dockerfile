@@ -3,3 +3,4 @@ WORKDIR /downloader
 COPY /requirements.txt .
 RUN pip install -r ./requirements.txt
 COPY /*.py .
+COPY .env .env

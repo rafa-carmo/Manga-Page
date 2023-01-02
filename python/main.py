@@ -7,8 +7,17 @@ from pathlib import Path
 from datetime import datetime
 import createMangas
 from math import floor
+from dotenv import load_dotenv
 
-defaultUrl = "http://192.168.5.25:1337/"
+load_dotenv()
+
+
+defaultUrl = os.getenv('DEFAULT_URL')
+databaseUrl= os.getenv('DATABASE_URL')
+host = os.getenv('DATABASE_HOST')
+
+verify = False
+
 
 def replaceHost(url):
     return url.replace('unionmangas', 'unionleitor')
@@ -21,6 +30,8 @@ def jsonSave(file, data):
     with open(file, "w+", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
+
+
 settings = jsonLoad("settings.json")
 while True:
     try:
@@ -30,6 +41,30 @@ while True:
         print("Arquivo downloads.json não encontrado, criando arquivo")
         with open('downloads.json', "w+", encoding="utf-8") as f:
             json.dump({}, f, ensure_ascii=False, indent=4)
+
+
+def verifyIfChapterDownloaded(id, chapter):
+    query= """
+        query chapters($id: Int) {
+        chapters(where: {mangas: {id: $id}}){
+            chapter
+        }
+        }
+    """
+    variables = {
+        "id": id
+      }
+
+    chaptersRequest = requests.post(f'{defaultUrl}graphql', json={'query': query, 'variables': variables})
+    
+    if(chaptersRequest.status_code == 200):
+        chapters = [chapter['chapter'] for chapter in chaptersRequest.json()['data']['chapters']]
+        if(chapter in chapters):
+            return True
+
+    return False
+
+
 def getHTML(url):
 
     while True:
@@ -73,7 +108,7 @@ def getDownloadList():
         }
      """
 
-    request = requests.post(settings['databaseUrl'], json={"query": query})
+    request = requests.post(databaseUrl, json={"query": query})
     if(request.status_code == 200):
         return request.json()['data']['downloadLists'][::-1]
 
@@ -99,11 +134,12 @@ def getChapters(html, new):
         sub = chapter.findAll("div",{"class": "col-xs-6 col-md-6 text-right"})[0].find('a')
         subUrl = sub['href']
         subName = sub.text
+        date = [ filterDate(span.text) for span in info.findAll('span') if '(' in span.text]
         chapterTemp['date']= None
         if new:
             date = [ filterDate(span.text) for span in info.findAll('span') if '(' in span.text]
             chapterTemp['date'] = date[0]
-
+        
         chapterTemp['chapter'] = chapterTitle
         chapterTemp['url'] = chapterUrl
         chapterTemp['sub'] = dict()
@@ -120,6 +156,7 @@ def registerChapters(chapter, title, existedId=False):
     try:
         html = getHTML(chapter['url'])
         pages = [ page['src'] for page in html.findAll("div", {"class": "col-sm-12 text-center"})[0].findAll("img") if "banner" not in page['src'] ]
+
     except Exception as e:
         print(e)
         return False
@@ -137,6 +174,7 @@ def registerChapters(chapter, title, existedId=False):
     chapterDict['type'] = 'update'
     chapterDict['createdAt'] = chapter['date']
 
+
     if(existedId != False):
       mutation = """
           mutation UpdatePages($input: updateChapterInput) {
@@ -147,7 +185,9 @@ def registerChapters(chapter, title, existedId=False):
             }
           }
       """
+
       organizePages = [ {'page': page} for page in chapterDict['chapterPages']]
+
       variables = {
         "input": {
           "where": {
@@ -160,12 +200,17 @@ def registerChapters(chapter, title, existedId=False):
       }
 
       updated = requests.post(f'{defaultUrl}graphql', json={'query': mutation, 'variables': variables})
+
       if(updated.status_code == 200):
         return True
       return False
 
+    
     if(len(chapterDict['chapterPages']) > 1):
+
         request = requests.post(f'{defaultUrl}chapters/updateChapters/', json=chapterDict)
+
+        
     else:
         return False
     if(request.status_code != 500):
@@ -256,6 +301,7 @@ def downloadChapter(chapter, title):
     if(len(chapterDict['chapterPages']) > 1):
         request = requests.post(f'{defaultUrl}chapters/updateChapters/', json=chapterDict)
 
+
     if(request.status_code != 500):
         return True
     return False
@@ -301,8 +347,8 @@ def getInfoUnion(url):
 
 
 def updateBannerAndRanks():
-    requests.get(f"http://{settings['databaseHost']}:1337/mangas/banner")
-    requests.get(f"http://{settings['databaseHost']}:1337/mangas/rankers")
+    requests.get(f"http://{host}:1337/mangas/banner")
+    requests.get(f"http://{host}:1337/mangas/rankers")
 
 def clearTerminal():
     if(os.name == 'nt'):
@@ -314,7 +360,7 @@ def clearTerminal():
 def getConnection():
     while True:
         try:
-            if(requests.get(f"http://{settings['databaseHost']}:1337/admin").status_code == 200):
+            if(requests.get(f"http://{host}:1337/admin").status_code == 200):
                 break
         except Exception as e:
             sleep(5)
@@ -376,14 +422,18 @@ def downloader():
 
 
     for item in getDownloadList():
+        
 
         # title= item['mangas']['title']
-        # if('The Return of the Disaster-Class Hero' not in title):
+
+        # if('helmut' not in item['downloadPages'][0]['url']):
         #     continue
+
         # if item['mangas']:
         #     continue
         try:
             download = [download for download in item['downloadPages'] if download['name'] == 'union'][0]
+
             # if(download['Type'] == 'Normal'):
             #     continue
             download['url'] = replaceHost(download['url'])
@@ -394,6 +444,7 @@ def downloader():
                 info['id'] = item['id']
                 data = createManga(info)
 
+
                 item['mangas'] = data
 
         except Exception as e:
@@ -403,34 +454,48 @@ def downloader():
 
         title= item['mangas']['title']
         slug = item['mangas']['slug']
+
         print(title)
 
+        
         for chapter in info['chapters']:
+            
             if(title not in downloadList):
                 downloadList[title] = list()
 
+            if(not verify):
+                if(chapter['chapter'] in downloadList[title]):
+                    print(f" * - Capitulo {chapter['chapter']} - já baixado {' '*10}", end="\r")
+                    continue
 
-            if(chapter['chapter'] in downloadList[title]):
-                print(f" * - Capitulo {chapter['chapter']} - já baixado {' '*10}", end="\r")
+            if(verify):
 
-            else:
-                existedId = createMangas.verifyIsLocal(slug, chapter['chapter'])
-                print()
-                print(f" * - Capitulo {chapter['chapter']} - Baixando", end="\r")
+                if(verifyIfChapterDownloaded(int(item['mangas']['id']), chapter['chapter'])):
+                    print(f" * - Capitulo {chapter['chapter']} - já na lista {' '*10}", end="\r")
+                    continue
+
+            
+            existedId = createMangas.verifyIsLocal(slug, chapter['chapter'])
+            print()
+            print(f" * - Capitulo {chapter['chapter']} - Baixando", end="\r")
 
 
 
-                if(download['Type'] == "Online"):
-                    isDownload = registerChapters(chapter, title, existedId)
-                if(download['Type'] == "Normal"):
-                    isDownload = downloadChapter(chapter, title)
-                    print(" "*40, end="\r")
-                    print(f" * - Capitulo {chapter['chapter']} - Baixado", end="\r")
+            if(download['Type'] == "Online"):
+                
+                isDownload = registerChapters(chapter, title, existedId)
 
-                if(isDownload):
-                    downloadList[title].append(chapter['chapter'])
+            if(download['Type'] == "Normal"):
+                isDownload = downloadChapter(chapter, title)
+                print(" "*40, end="\r")
+                print(f" * - Capitulo {chapter['chapter']} - Baixado", end="\r")
 
-                    jsonSave("downloads.json", downloadList)
+            if(isDownload):
+                downloadList[title].append(chapter['chapter'])
+
+                jsonSave("downloads.json", downloadList)
+        
+
         if (info['status'] == 'complete'):
             print("Manga completo atualizando lista")
             mutation_remove = """
@@ -476,6 +541,7 @@ def downloader():
         print()
 
     print()
+    return
     # print(Path(settings['baseUrl']))
 
 def counter(initial_seconds):
@@ -497,6 +563,7 @@ while True:
     downloader()
 
     clearTerminal()
+    verify=False
     print("Aguardando para reiniciar verificação")
     counter(3200)
     downloadList = jsonLoad("downloads.json")

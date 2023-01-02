@@ -27,8 +27,9 @@ def verifyIsLocal(slug, chapter):
   chapters = requests.post(f'http://{settings["databaseHost"]}:1337/graphql', json={'query': query, 'variables': variables}).json()
 
   try:
-    if('http' not in chapters['data']['chapters'][0]['pages'][0]['page']):
-      return chapters['data']['chapters'][0]['id']
+    if(len(chapters['data']['chapters']) > 0):
+        if('http' not in chapters['data']['chapters'][0]['pages'][0]['page']):
+          return chapters['data']['chapters'][0]['id']
     return False
   except Exception as e:
     print(e)
