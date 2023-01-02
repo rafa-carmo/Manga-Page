@@ -7,7 +7,7 @@
 // GraphQL query operation: QueryChaptersById
 // ====================================================
 
-export interface QueryChaptersById_chaptersInfo_scan {
+export interface QueryChaptersById_chaptersInfo_scans {
   __typename: "Scan";
   scan: string;
 }
@@ -16,7 +16,7 @@ export interface QueryChaptersById_chaptersInfo {
   __typename: "Chapter";
   id: string;
   chapter: string;
-  scan: QueryChaptersById_chaptersInfo_scan | null;
+  scans: QueryChaptersById_chaptersInfo_scans[];
   created_at: any;
   createdAt: any | null;
 }

@@ -92,7 +92,7 @@ export const QUERY_CHAPTERS_BY_ID = gql`
     ) {
       id
       chapter
-      scan {
+      scans {
         scan
       }
       created_at

@@ -20,7 +20,7 @@ export interface ChaptersHome_mangas {
   cover: ChaptersHome_mangas_cover | null;
 }
 
-export interface ChaptersHome_scan {
+export interface ChaptersHome_scans {
   __typename: "Scan";
   id: string;
   scan: string;
@@ -32,7 +32,7 @@ export interface ChaptersHome {
   id: string;
   mangas: ChaptersHome_mangas | null;
   chapter: string;
-  scan: ChaptersHome_scan | null;
+  scans: ChaptersHome_scans[];
   created_at: any;
   createdAt: any | null;
 }

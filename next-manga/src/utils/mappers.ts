@@ -34,7 +34,7 @@ export const MangaCardSliderMapper = (mangas: QueryPageMangas_lastMangas[]) => {
       <MangaCardProps>{
         title: manga.title,
         slug: manga.slug,
-        img: manga.cover ? formatImage(manga.cover!.url) : 'images/unknow.webp'
+        img: manga.cover ? formatImage(manga.cover!.url) : '/images/unknow.webp'
       }
   )
 }
@@ -73,7 +73,7 @@ export const ChapterMapper = (
             <ChapterProps>{
               id: chapter.id,
               chapter: chapter.chapter,
-              scan: chapter.scan?.scan ?? 'Desconhecida',
+              scan: chapter.scans[0]?.scan ?? 'Desconhecida',
               date: chapter.createdAt
             }
         )
@@ -100,7 +100,7 @@ export const MangaReleased = (
           {
             id: manga.id,
             chapter: manga.chapter,
-            scan: manga.scan?.scan ? manga.scan?.scan : 'Desconhecida',
+            scan: manga.scans[0]?.scan ? manga.scans[0].scan : 'Desconhecida',
             date: manga.createdAt
           }
         ]

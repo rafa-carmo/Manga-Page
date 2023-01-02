@@ -41,7 +41,7 @@ export const ChaptersHome = gql`
       }
     }
     chapter
-    scan {
+    scans {
       id
       scan
       slug

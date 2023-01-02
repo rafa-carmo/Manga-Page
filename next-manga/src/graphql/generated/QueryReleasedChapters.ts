@@ -20,7 +20,7 @@ export interface QueryReleasedChapters_chapters_mangas {
   cover: QueryReleasedChapters_chapters_mangas_cover | null;
 }
 
-export interface QueryReleasedChapters_chapters_scan {
+export interface QueryReleasedChapters_chapters_scans {
   __typename: "Scan";
   id: string;
   scan: string;
@@ -32,7 +32,7 @@ export interface QueryReleasedChapters_chapters {
   id: string;
   mangas: QueryReleasedChapters_chapters_mangas | null;
   chapter: string;
-  scan: QueryReleasedChapters_chapters_scan | null;
+  scans: QueryReleasedChapters_chapters_scans[];
   created_at: any;
   createdAt: any | null;
 }

@@ -257,10 +257,10 @@ type Chapter {
   created_at: DateTime!
   updated_at: DateTime!
   chapter: String!
-  scan: Scan
   pages: [ComponentChapterPages]
   mangas: Mangas
   createdAt: DateTime
+  scans(sort: String, limit: Int, start: Int, where: JSON): [Scan!]!
 }
 
 type ChapterConnection {
@@ -279,7 +279,6 @@ type ChapterGroupBy {
   created_at: [ChapterConnectionCreated_at]
   updated_at: [ChapterConnectionUpdated_at]
   chapter: [ChapterConnectionChapter]
-  scan: [ChapterConnectionScan]
   mangas: [ChapterConnectionMangas]
   createdAt: [ChapterConnectionCreatedAt]
 }
@@ -304,11 +303,6 @@ type ChapterConnectionChapter {
   connection: ChapterConnection
 }
 
-type ChapterConnectionScan {
-  key: ID
-  connection: ChapterConnection
-}
-
 type ChapterConnectionMangas {
   key: ID
   connection: ChapterConnection
@@ -321,20 +315,20 @@ type ChapterConnectionCreatedAt {
 
 input ChapterInput {
   chapter: String!
-  scan: ID
   pages: [ComponentChapterPageInput]
   mangas: ID
   createdAt: DateTime
+  scans: [ID]
   created_by: ID
   updated_by: ID
 }
 
 input editChapterInput {
   chapter: String
-  scan: ID
   pages: [editComponentChapterPageInput]
   mangas: ID
   createdAt: DateTime
+  scans: [ID]
   created_by: ID
   updated_by: ID
 }
@@ -1163,7 +1157,6 @@ type Scan {
   updated_at: DateTime!
   scan: String!
   slug: String
-  chapters(sort: String, limit: Int, start: Int, where: JSON): [Chapter!]!
 }
 
 type ScanConnection {
@@ -1213,7 +1206,6 @@ type ScanConnectionSlug {
 input ScanInput {
   scan: String!
   slug: String
-  chapters: [ID]
   created_by: ID
   updated_by: ID
 }
@@ -1221,7 +1213,6 @@ input ScanInput {
 input editScanInput {
   scan: String
   slug: String
-  chapters: [ID]
   created_by: ID
   updated_by: ID
 }
@@ -1516,6 +1507,42 @@ input deleteWishlistInput {
 
 type deleteWishlistPayload {
   wishlist: Wishlist
+}
+
+type BackupRestoreBackup {
+  id: ID!
+  created_at: DateTime!
+  updated_at: DateTime!
+  created_by: AdminUser
+  updated_by: AdminUser
+}
+
+input BackupInput {
+  strapiVersion: String!
+  adminVersion: String!
+  dbEngine: String
+  identifier: String!
+  size: String!
+  manual: Boolean!
+  backupPath: String!
+  hasDB: Boolean
+  hasUploads: Boolean
+  created_by: ID
+  updated_by: ID
+}
+
+input editBackupInput {
+  strapiVersion: String
+  adminVersion: String
+  dbEngine: String
+  identifier: String
+  size: String
+  manual: Boolean
+  backupPath: String
+  hasDB: Boolean
+  hasUploads: Boolean
+  created_by: ID
+  updated_by: ID
 }
 
 type I18NLocale {
@@ -2053,7 +2080,7 @@ input editComponentExternalPageDownloadPageInput {
   Type: ENUM_COMPONENTEXTERNALPAGEDOWNLOADPAGES_TYPE
 }
 
-union Morph = UsersPermissionsMe | UsersPermissionsMeRole | UsersPermissionsLoginPayload | UserPermissionsPasswordPayload | Artist | ArtistConnection | ArtistAggregator | ArtistGroupBy | ArtistConnectionId | ArtistConnectionCreated_at | ArtistConnectionUpdated_at | ArtistConnectionName | ArtistConnectionValue | ArtistConnectionMangas | createArtistPayload | updateArtistPayload | deleteArtistPayload | Banners | BannersConnection | BannersAggregator | BannersGroupBy | BannersConnectionId | BannersConnectionCreated_at | BannersConnectionUpdated_at | BannersConnectionMangas | createBannerPayload | updateBannerPayload | deleteBannerPayload | Chapter | ChapterConnection | ChapterAggregator | ChapterGroupBy | ChapterConnectionId | ChapterConnectionCreated_at | ChapterConnectionUpdated_at | ChapterConnectionChapter | ChapterConnectionScan | ChapterConnectionMangas | ChapterConnectionCreatedAt | createChapterPayload | updateChapterPayload | deleteChapterPayload | DownloadList | DownloadListConnection | DownloadListAggregator | DownloadListGroupBy | DownloadListConnectionId | DownloadListConnectionCreated_at | DownloadListConnectionUpdated_at | DownloadListConnectionId_mal | DownloadListConnectionId_anilist | DownloadListConnectionImage | DownloadListConnectionMangas | createDownloadListPayload | updateDownloadListPayload | deleteDownloadListPayload | Favorites | FavoritesConnection | FavoritesAggregator | FavoritesGroupBy | FavoritesConnectionId | FavoritesConnectionCreated_at | FavoritesConnectionUpdated_at | FavoritesConnectionUser | createFavoritePayload | updateFavoritePayload | deleteFavoritePayload | Genres | GenresConnection | GenresAggregator | GenresGroupBy | GenresConnectionId | GenresConnectionCreated_at | GenresConnectionUpdated_at | GenresConnectionLabel | GenresConnectionValue | createGenrePayload | updateGenrePayload | deleteGenrePayload | Mangas | MangasConnection | MangasAggregator | MangasGroupBy | MangasConnectionId | MangasConnectionCreated_at | MangasConnectionUpdated_at | MangasConnectionTitle | MangasConnectionSlug | MangasConnectionCover | MangasConnectionBanner | MangasConnectionEnglishName | MangasConnectionOriginalName | MangasConnectionRomajiName | MangasConnectionType | MangasConnectionSinopse | MangasConnectionStatus | MangasConnectionOrigin | MangasConnectionId_anilist | createMangasPayload | updateMangasPayload | deleteMangasPayload | Origins | OriginsConnection | OriginsAggregator | OriginsGroupBy | OriginsConnectionId | OriginsConnectionCreated_at | OriginsConnectionUpdated_at | OriginsConnectionLabel | OriginsConnectionValue | createOriginPayload | updateOriginPayload | deleteOriginPayload | Rank | RankConnection | RankAggregator | RankGroupBy | RankConnectionId | RankConnectionCreated_at | RankConnectionUpdated_at | RankConnectionTitle | RankConnectionCover | RankConnectionGenres | RankConnectionUrl | RankConnectionRank | createRankPayload | updateRankPayload | deleteRankPayload | Reader | ReaderConnection | ReaderAggregator | ReaderGroupBy | ReaderConnectionId | ReaderConnectionCreated_at | ReaderConnectionUpdated_at | ReaderConnectionUser | ReaderConnectionReaders | ReaderConnectionOnlyUpdate | createReaderPayload | updateReaderPayload | deleteReaderPayload | Scan | ScanConnection | ScanAggregator | ScanGroupBy | ScanConnectionId | ScanConnectionCreated_at | ScanConnectionUpdated_at | ScanConnectionScan | ScanConnectionSlug | createScanPayload | updateScanPayload | deleteScanPayload | Status | StatusConnection | StatusAggregator | StatusGroupBy | StatusConnectionId | StatusConnectionCreated_at | StatusConnectionUpdated_at | StatusConnectionLabel | StatusConnectionValue | createStatusPayload | updateStatusPayload | deleteStatusPayload | Story | StoryConnection | StoryAggregator | StoryGroupBy | StoryConnectionId | StoryConnectionCreated_at | StoryConnectionUpdated_at | StoryConnectionName | createStoryPayload | updateStoryPayload | deleteStoryPayload | Wishlist | WishlistConnection | WishlistAggregator | WishlistGroupBy | WishlistConnectionId | WishlistConnectionCreated_at | WishlistConnectionUpdated_at | WishlistConnectionWishs | createWishlistPayload | updateWishlistPayload | deleteWishlistPayload | I18NLocale | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileAggregatorSum | UploadFileAggregatorAvg | UploadFileAggregatorMin | UploadFileAggregatorMax | UploadFileGroupBy | UploadFileConnectionId | UploadFileConnectionCreated_at | UploadFileConnectionUpdated_at | UploadFileConnectionName | UploadFileConnectionAlternativeText | UploadFileConnectionCaption | UploadFileConnectionWidth | UploadFileConnectionHeight | UploadFileConnectionFormats | UploadFileConnectionHash | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionPreviewUrl | UploadFileConnectionProvider | UploadFileConnectionProvider_metadata | deleteFilePayload | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnectionId | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsUser | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnectionId | UsersPermissionsUserConnectionCreated_at | UsersPermissionsUserConnectionUpdated_at | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole | createUserPayload | updateUserPayload | deleteUserPayload | ComponentChapterChapter | ComponentChapterPages | ComponentExternalPageBanners | ComponentExternalPageDownloadPages
+union Morph = UsersPermissionsMe | UsersPermissionsMeRole | UsersPermissionsLoginPayload | UserPermissionsPasswordPayload | Artist | ArtistConnection | ArtistAggregator | ArtistGroupBy | ArtistConnectionId | ArtistConnectionCreated_at | ArtistConnectionUpdated_at | ArtistConnectionName | ArtistConnectionValue | ArtistConnectionMangas | createArtistPayload | updateArtistPayload | deleteArtistPayload | Banners | BannersConnection | BannersAggregator | BannersGroupBy | BannersConnectionId | BannersConnectionCreated_at | BannersConnectionUpdated_at | BannersConnectionMangas | createBannerPayload | updateBannerPayload | deleteBannerPayload | Chapter | ChapterConnection | ChapterAggregator | ChapterGroupBy | ChapterConnectionId | ChapterConnectionCreated_at | ChapterConnectionUpdated_at | ChapterConnectionChapter | ChapterConnectionMangas | ChapterConnectionCreatedAt | createChapterPayload | updateChapterPayload | deleteChapterPayload | DownloadList | DownloadListConnection | DownloadListAggregator | DownloadListGroupBy | DownloadListConnectionId | DownloadListConnectionCreated_at | DownloadListConnectionUpdated_at | DownloadListConnectionId_mal | DownloadListConnectionId_anilist | DownloadListConnectionImage | DownloadListConnectionMangas | createDownloadListPayload | updateDownloadListPayload | deleteDownloadListPayload | Favorites | FavoritesConnection | FavoritesAggregator | FavoritesGroupBy | FavoritesConnectionId | FavoritesConnectionCreated_at | FavoritesConnectionUpdated_at | FavoritesConnectionUser | createFavoritePayload | updateFavoritePayload | deleteFavoritePayload | Genres | GenresConnection | GenresAggregator | GenresGroupBy | GenresConnectionId | GenresConnectionCreated_at | GenresConnectionUpdated_at | GenresConnectionLabel | GenresConnectionValue | createGenrePayload | updateGenrePayload | deleteGenrePayload | Mangas | MangasConnection | MangasAggregator | MangasGroupBy | MangasConnectionId | MangasConnectionCreated_at | MangasConnectionUpdated_at | MangasConnectionTitle | MangasConnectionSlug | MangasConnectionCover | MangasConnectionBanner | MangasConnectionEnglishName | MangasConnectionOriginalName | MangasConnectionRomajiName | MangasConnectionType | MangasConnectionSinopse | MangasConnectionStatus | MangasConnectionOrigin | MangasConnectionId_anilist | createMangasPayload | updateMangasPayload | deleteMangasPayload | Origins | OriginsConnection | OriginsAggregator | OriginsGroupBy | OriginsConnectionId | OriginsConnectionCreated_at | OriginsConnectionUpdated_at | OriginsConnectionLabel | OriginsConnectionValue | createOriginPayload | updateOriginPayload | deleteOriginPayload | Rank | RankConnection | RankAggregator | RankGroupBy | RankConnectionId | RankConnectionCreated_at | RankConnectionUpdated_at | RankConnectionTitle | RankConnectionCover | RankConnectionGenres | RankConnectionUrl | RankConnectionRank | createRankPayload | updateRankPayload | deleteRankPayload | Reader | ReaderConnection | ReaderAggregator | ReaderGroupBy | ReaderConnectionId | ReaderConnectionCreated_at | ReaderConnectionUpdated_at | ReaderConnectionUser | ReaderConnectionReaders | ReaderConnectionOnlyUpdate | createReaderPayload | updateReaderPayload | deleteReaderPayload | Scan | ScanConnection | ScanAggregator | ScanGroupBy | ScanConnectionId | ScanConnectionCreated_at | ScanConnectionUpdated_at | ScanConnectionScan | ScanConnectionSlug | createScanPayload | updateScanPayload | deleteScanPayload | Status | StatusConnection | StatusAggregator | StatusGroupBy | StatusConnectionId | StatusConnectionCreated_at | StatusConnectionUpdated_at | StatusConnectionLabel | StatusConnectionValue | createStatusPayload | updateStatusPayload | deleteStatusPayload | Story | StoryConnection | StoryAggregator | StoryGroupBy | StoryConnectionId | StoryConnectionCreated_at | StoryConnectionUpdated_at | StoryConnectionName | createStoryPayload | updateStoryPayload | deleteStoryPayload | Wishlist | WishlistConnection | WishlistAggregator | WishlistGroupBy | WishlistConnectionId | WishlistConnectionCreated_at | WishlistConnectionUpdated_at | WishlistConnectionWishs | createWishlistPayload | updateWishlistPayload | deleteWishlistPayload | BackupRestoreBackup | I18NLocale | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileAggregatorSum | UploadFileAggregatorAvg | UploadFileAggregatorMin | UploadFileAggregatorMax | UploadFileGroupBy | UploadFileConnectionId | UploadFileConnectionCreated_at | UploadFileConnectionUpdated_at | UploadFileConnectionName | UploadFileConnectionAlternativeText | UploadFileConnectionCaption | UploadFileConnectionWidth | UploadFileConnectionHeight | UploadFileConnectionFormats | UploadFileConnectionHash | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionPreviewUrl | UploadFileConnectionProvider | UploadFileConnectionProvider_metadata | deleteFilePayload | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnectionId | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsUser | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnectionId | UsersPermissionsUserConnectionCreated_at | UsersPermissionsUserConnectionUpdated_at | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole | createUserPayload | updateUserPayload | deleteUserPayload | ComponentChapterChapter | ComponentChapterPages | ComponentExternalPageBanners | ComponentExternalPageDownloadPages
 
 input InputID {
   id: ID!
