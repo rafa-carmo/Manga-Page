@@ -159,6 +159,7 @@ def registerChapters(chapter, title, existedId=False):
 
     except Exception as e:
         print(e)
+
         return False
 
 
@@ -335,8 +336,11 @@ def getInfoUnion(url):
     for info in infos:
 
         listData = info.text.strip().split(":")
+
         if(replace(listData[0]) == "Gênero"):
-            infoDict[f"{replace(listData[0])}s"] = listData[1].replace(' ', '').split(',')
+            
+            infoDict[f"{replace(listData[0])}s"] = listData[1].strip().split(',')
+            infoDict[f"{replace(listData[0])}s"] = [genre.strip() for genre in infoDict[f"{replace(listData[0])}s"]]
         else:
             infoDict[replace(listData[0]).title().replace(" ", "")] = ' '.join(listData[1:]).strip()
 
@@ -373,6 +377,7 @@ def createManga(info):
 
     info['sinopse'] = info['Sinopse']
     info['genres'] = info['Gêneros']
+
     if data != None and len(data) > 0:
         data['titleJson'] = info['Title']
         data = {**data, **info}

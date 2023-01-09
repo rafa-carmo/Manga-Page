@@ -14,6 +14,7 @@ import UserDropdown from 'components/UserDropdown'
 import { MangaCardProps } from 'components/MangaCard'
 import { useRouter } from 'next/router'
 import { ModalContext } from 'hooks/add-manga'
+import Notification from 'components/Notification';
 
 type MenuProps = {
   username?: string | null
@@ -63,7 +64,10 @@ const Menu: React.FC<MenuProps> = ({ username, color, loading, manga }) => {
             {!loading && (
               <>
                 {username ? (
+                  <>
                   <UserDropdown username={username} />
+                  <Notification />
+                  </>
                 ) : (
                   <MediaMatch greaterThan="medium">
                     <Link href={`/sign-in?callbackUrl=${asPath}`} passHref>

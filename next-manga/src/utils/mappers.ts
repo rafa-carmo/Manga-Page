@@ -21,6 +21,9 @@ import { xor } from 'lodash'
 import { QueryReaders_readers } from '../graphql/generated/QueryReaders'
 import { QueryChaptersById_chaptersInfo } from 'graphql/generated/QueryChaptersById'
 import { QueryUserWishlist_wishlistForUser } from '../graphql/generated/QueryUserWishlist'
+import { ItemProps as NotificationsProps } from 'components/Notification/Item'
+import { notificationBody } from 'components/Notification'
+
 
 export const StringToNumberMapper = (numbers: string[]) => {
   return numbers.sort(function (a, b) {
@@ -162,4 +165,13 @@ export const ReaderListMapper = (
       : []
     : []
   return chaptersReturn
+}
+
+export const notificationsMapper = (notifications:notificationBody[]): NotificationsProps[] => {
+  return notifications.map((notification) => ({
+    id: notification.id,
+    message: notification.content,
+    slug: notification.mangaSlug,
+    chapter: notification.chapter
+  }))
 }
