@@ -43,7 +43,12 @@ export class PrismaPushNotificationRepository
   sendPushNotification(
     pushNotification: PushNotification,
     message: string
-  ): void {
+  ) {
+    WebPush.setVapidDetails(
+      'https://localhost:1338',
+      process.env.PUBLIC_KEY || '',
+      process.env.PRIVATE_KEY || ''
+    )
     WebPush.sendNotification(
       {
         endpoint: pushNotification.url,
