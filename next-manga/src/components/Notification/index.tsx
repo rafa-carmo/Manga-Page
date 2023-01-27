@@ -23,6 +23,7 @@ export interface notificationBody {
 
 }
 
+
 const Notification = ({ userId }: { userId: string | null }) => {
   const [notifications, setNotifications] = useState([])
   useEffect(()=>{
@@ -32,6 +33,41 @@ const Notification = ({ userId }: { userId: string | null }) => {
     .catch(err => console.log(err))
   },[])
 
+  useEffect(() => {
+    window.Notification.requestPermission(permission => {
+      if(permission === 'granted') {
+        navigator.serviceWorker.register('service-worker-notification.js').then(async serviceWorker => {
+          let subscription = await serviceWorker.pushManager.getSubscription()
+
+          if(!subscription) {
+            const publicKeyResponse = await fetch('/api/push_notifications')
+            .then((data) => data.json())
+
+            subscription = await serviceWorker.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: publicKeyResponse.publicKey
+            })
+
+            const subscriptionData = subscription.toJSON()
+            fetch(`/api/push_notifications`, {
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+              },
+              method: "post",
+              body: 
+              JSON.stringify({
+                                      user: userId, 
+                                      endpoint: subscriptionData.endpoint, 
+                                      auth:  subscriptionData?.keys?.auth, 
+                                      p256dh:  subscriptionData?.keys?.p256dh
+                                    })
+          })
+          }
+        })
+      }
+    })
+  },[ ])
   return (
   <S.Wrapper>
   <Menu>
