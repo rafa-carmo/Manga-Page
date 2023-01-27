@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "1338:1338"
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:147258@192.168.5.27:5432/notifications?schema=public
