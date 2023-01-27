@@ -16,6 +16,14 @@ defaultUrl = os.getenv('DEFAULT_URL')
 databaseUrl= os.getenv('DATABASE_URL')
 host = os.getenv('DATABASE_HOST')
 
+withLoop = True
+
+try:
+    withLoop = sys.argv[1]
+except Exception as e:
+    pass
+
+
 verify = False
 
 
@@ -68,7 +76,7 @@ def verifyIfChapterDownloaded(id, chapter):
 def getHTML(url):
 
     while True:
-        request = requests.get(url)
+        request = requests.get(url, timeout=5)
         if(request.status_code != 200):
             print(f"Erro de conexão [{request.status_code}] - {url}")
         else:
@@ -150,6 +158,34 @@ def getChapters(html, new):
 
     return infoChapter
 
+def registerNotification(manga):
+
+    queryFavorites = """
+        query findFavorites($slug: String!){
+      favorites(where:{mangases: {slug: $slug}}){
+        user{
+          id
+        }
+      }
+    }      
+    """
+    favoritesRequest = requests.post(f'{defaultUrl}graphql', json={'query': queryFavorites, 'variables': {"slug": manga['slug']}})
+
+    if(favoritesRequest.status_code != 200):
+        return False
+    favoriteList = favoritesRequest.json()["data"]["favorites"]
+    usersIds = [user["user"]["id"] for user in favoriteList]
+    if(len(usersIds) > 0):
+        notifications = [{
+        "recipientId": userId,
+        "content": f"Capítulo {manga['chapter']} de {manga['title']}",
+        "mangaSlug": manga['slug'],
+        "chapter": manga['chapter']
+            } for userId in usersIds]
+        
+        [requests.post('http://192.168.5.25:1338/notifications', data=notification) for notification in notifications ]
+    return True
+
 def registerChapters(chapter, title, existedId=False):
     chapter['url'] = replaceHost(chapter['url'])
 
@@ -211,6 +247,12 @@ def registerChapters(chapter, title, existedId=False):
 
         request = requests.post(f'{defaultUrl}chapters/updateChapters/', json=chapterDict)
 
+        registerNotification({
+                "slug": slugRe(chapter['sub']['name']),
+                "chapter": chapter['chapter'],
+                "title": title
+            })
+
         
     else:
         return False
@@ -236,7 +278,7 @@ def downloadChapter(chapter, title):
             req.addheaders = urllib.request.build_opener()
             head = [('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
             urllib.request.install_opener(req)
-            request = requests.get(chapter["url"])
+            request = requests.get(chapter["url"], timeout=5)
             html = BeautifulSoup(request.text, 'html.parser')
             pages = [ page['src'] for page in html.findAll("div", {"class": "col-sm-12 text-center"})[0].findAll("img") if "banner" not in page['src'] ]
             break
@@ -561,6 +603,7 @@ def counter(initial_seconds):
         if(secondsAmount <= 0):
             break
 
+
 # createManga("Bleach")
 getConnection()
 while True:
@@ -568,6 +611,9 @@ while True:
     downloader()
 
     clearTerminal()
+    if(withLoop==False):
+        break
+    
     verify=False
     print("Aguardando para reiniciar verificação")
     counter(3200)
