@@ -19,9 +19,10 @@ export type BaseTemplateProps = {
 const Base = ({ children, manga }: BaseTemplateProps) => {
   const { data: session, status: loading} = useSession()
   const { isOpen } = useContext(ModalContext)
+
   return (
     <S.Wrapper>
-      <Menu username={session?.user?.name} loading={loading === 'loading'} manga={manga} />
+      <Menu username={session?.user?.name} userId={session?.id as string} loading={loading === 'loading'} manga={manga} />
 
       <S.Content>{children}</S.Content>
 

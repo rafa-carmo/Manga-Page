@@ -18,11 +18,12 @@ import Notification from 'components/Notification';
 
 type MenuProps = {
   username?: string | null
+  userId?: string | null
   color?: 'black' | 'white'
   loading?: boolean
   manga?: Pick<MangaCardProps, 'title' | 'slug'>
 }
-const Menu: React.FC<MenuProps> = ({ username, color, loading, manga }) => {
+const Menu: React.FC<MenuProps> = ({ username, color, loading, manga, userId }) => {
   const [isOpen, setIsOpen] = useState(false)
   const { asPath } = useRouter()
   const { setIsOpen: setModalIsOpen } = useContext(ModalContext)
@@ -66,7 +67,7 @@ const Menu: React.FC<MenuProps> = ({ username, color, loading, manga }) => {
                 {username ? (
                   <>
                   <UserDropdown username={username} />
-                  <Notification />
+                  <Notification userId={userId} />
                   </>
                 ) : (
                   <MediaMatch greaterThan="medium">

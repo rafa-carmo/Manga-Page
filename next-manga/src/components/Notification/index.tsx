@@ -20,17 +20,18 @@ export interface notificationBody {
   createdAt: string
   readAt: string | null
   recipientId: string
+
 }
 
-const Notification = () => {
+const Notification = ({ userId }: { userId: string | null }) => {
   const [notifications, setNotifications] = useState([])
   useEffect(()=>{
-    fetch('/api/notifications')
+    fetch(`/api/notifications?user=${userId}`)
     .then((data) => data.json())
     .then((data) => setNotifications(data.data))
     .catch(err => console.log(err))
   },[])
-console.log(notifications)
+
   return (
   <S.Wrapper>
   <Menu>
