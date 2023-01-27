@@ -5,6 +5,8 @@ import { SendNotification } from '../../../application/use-cases/send-notificati
 import { Content } from '@application/entities/content'
 import { NotificationViewModel } from '../view-models/notification-view-model'
 import { GetRecipientNotifications } from '@application/use-cases/get-recipient-notifications'
+import { GetPublicKey } from '@application/use-cases/get-public-key-push-notification'
+import { CreateSubscriptionNotificationUrl } from '@application/use-cases/create-subscription-notification'
 
 @Controller('/notifications')
 export class NotificationsController {
@@ -41,5 +43,30 @@ export class NotificationsController {
       mangaSlug
     })
     return { notification: NotificationViewModel.toHttp(notification) }
+  }
+}
+
+@Controller('/push_notification')
+export class PushNotificationController {
+  constructor(
+    private getPublicKey: GetPublicKey,
+    private createSubscription: CreateSubscriptionNotificationUrl
+  ) {}
+  @Get('/public_key')
+  getPushNotificationPublicKey() {
+    const publicKey = this.getPublicKey.execute()
+    return publicKey
+  }
+  @Post('/')
+  async createSubscriptionNotificationUrl(
+    @Body()
+    body: {
+      p256dh: string
+      auth: string
+      recipientId: string
+      url: string
+    }
+  ) {
+    await this.createSubscription.execute({ ...body })
   }
 }
