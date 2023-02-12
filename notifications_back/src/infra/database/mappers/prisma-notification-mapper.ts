@@ -11,7 +11,8 @@ export class PrismaNotificationMapper {
       readAt: notification.readAt,
       createdAt: notification.createAt,
       mangaSlug: notification.mangaSlug,
-      chapter: notification.chapter
+      chapter: notification.chapter,
+      discordId: notification.discordId
     }
   }
 
@@ -23,7 +24,8 @@ export class PrismaNotificationMapper {
         readAt: raw.readAt,
         recipientId: raw.recipientId,
         mangaSlug: raw.mangaSlug,
-        chapter: raw.chapter
+        chapter: raw.chapter,
+        discordId: raw.discordId
       },
       raw.id
     )

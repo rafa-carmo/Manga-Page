@@ -9,6 +9,7 @@ interface SendNotificationsRequest {
   content: Content
   mangaSlug: string
   chapter: string
+  discordId?: string | null
 }
 
 interface SendNotificationResponse {
@@ -25,13 +26,14 @@ export class SendNotification {
   async execute(
     request: SendNotificationsRequest
   ): Promise<SendNotificationResponse> {
-    const { chapter, content, mangaSlug, recipientId } = request
+    const { chapter, content, mangaSlug, recipientId, discordId } = request
 
     const notification = new Notification({
       chapter,
       content,
       mangaSlug,
-      recipientId
+      recipientId,
+      discordId
     })
 
     await this.notificationRepository.create(notification)

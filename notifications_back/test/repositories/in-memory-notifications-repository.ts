@@ -36,6 +36,12 @@ export class InMemoryNotificationsRepository implements NotificationRepository {
       (notification) => notification.recipientId === recipientId
     )
   }
+
+  async findManyUnreceived(): Promise<Notification[]> {
+    return this.notifications.filter(
+      (notification) => notification.discordNotified === false
+    )
+  }
   async save(notification: Notification): Promise<void> {
     const notificationIndex = this.notifications.findIndex(
       (item) => item.id === notification.id
@@ -44,5 +50,9 @@ export class InMemoryNotificationsRepository implements NotificationRepository {
     if (notificationIndex >= 0) {
       this.notifications[notificationIndex] = notification
     }
+  }
+
+  async markReceivedNotifications(): Promise<void> {
+    this.notifications.map((notification) => notification.discordNotify())
   }
 }

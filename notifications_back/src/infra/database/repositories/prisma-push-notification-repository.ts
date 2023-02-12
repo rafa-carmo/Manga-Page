@@ -40,10 +40,7 @@ export class PrismaPushNotificationRepository
     return pushNotifications.map(PrismaPushNotificationMapper.toDomain)
   }
 
-  sendPushNotification(
-    pushNotification: PushNotification,
-    message: string
-  ) {
+  sendPushNotification(pushNotification: PushNotification, message: string) {
     WebPush.setVapidDetails(
       'https://localhost:1338',
       process.env.PUBLIC_KEY || '',

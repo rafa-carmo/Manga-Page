@@ -7,3 +7,5 @@ services:
     restart: always
     environment:
       - DATABASE_URL=postgresql://postgres:147258@192.168.5.27:5432/notifications?schema=public
+      - PRIVATE_KEY='uR_klJDAKwB_gSXmMM8Hsu2DR8r8l-TqomgJGPcpBpw'
+      - PUBLIC_KEY='BPYMrHkP4b6if5I6p6oVuOQfnw7OhXheMoidBq_oNbV0RzuX-l8YPPqCX5G2U5_OXrDw-Y_tV60ZCXwMe7UBNtQ'

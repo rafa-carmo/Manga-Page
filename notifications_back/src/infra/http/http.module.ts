@@ -10,6 +10,8 @@ import {
 import { VerifyHasNotifications } from '@application/use-cases/verify-has-notification'
 import { GetPublicKey } from '@application/use-cases/get-public-key-push-notification'
 import { CreateSubscriptionNotificationUrl } from '@application/use-cases/create-subscription-notification'
+import { GetDiscordUnreceivedNotifications } from '@application/use-cases/get-discord-unreceived-notifications-by-recipient-id'
+import { DiscordReceivedNotification } from '@application/use-cases/discord-received-notification'
 
 @Module({
   imports: [DatabaseModule],
@@ -19,7 +21,9 @@ import { CreateSubscriptionNotificationUrl } from '@application/use-cases/create
     GetRecipientNotifications,
     VerifyHasNotifications,
     GetPublicKey,
-    CreateSubscriptionNotificationUrl
+    CreateSubscriptionNotificationUrl,
+    GetDiscordUnreceivedNotifications,
+    DiscordReceivedNotification
   ]
 })
 export class HttpModule {}

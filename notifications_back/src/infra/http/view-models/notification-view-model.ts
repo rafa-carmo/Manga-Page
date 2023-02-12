@@ -8,7 +8,8 @@ export class NotificationViewModel {
       chapter: notification.chapter,
       createdAt: notification.createAt,
       readAt: notification.readAt,
-      recipientId: notification.recipientId
+      recipientId: notification.recipientId,
+      discordId: notification.discordId
     }
   }
 }

@@ -8,6 +8,7 @@ import { NotificationNotFound } from '../../../application/use-cases/errors/noti
 @Injectable()
 export class PrismaNotificationsRepository implements NotificationRepository {
   constructor(private prismaService: PrismaService) {}
+
   async findMany(recipientId: string): Promise<Notification[]> {
     const notifications = await this.prismaService.notification.findMany({
       where: {
@@ -18,7 +19,15 @@ export class PrismaNotificationsRepository implements NotificationRepository {
 
     return notifications.map(PrismaNotificationMapper.toDomain)
   }
+  async findManyUnreceived(): Promise<Notification[]> {
+    const notifications = await this.prismaService.notification.findMany({
+      where: {
+        discordNotified: false
+      }
+    })
 
+    return notifications.map(PrismaNotificationMapper.toDomain)
+  }
   async findById(notificationId: string): Promise<Notification | null> {
     const notification = await this.prismaService.notification.findUnique({
       where: {
@@ -67,6 +76,16 @@ export class PrismaNotificationsRepository implements NotificationRepository {
     await this.prismaService.notification.update({
       where: { id: raw.id },
       data: raw
+    })
+  }
+  async markReceivedNotifications(): Promise<void> {
+    await this.prismaService.notification.updateMany({
+      where: {
+        discordNotified: false
+      },
+      data: {
+        discordNotified: true
+      }
     })
   }
 }

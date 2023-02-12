@@ -8,6 +8,8 @@ export interface NotificationProps {
   mangaSlug: string
   chapter: string
   recipientId: string
+  discordId?: string | null
+  discordNotified?: boolean
 }
 
 export class Notification {
@@ -18,7 +20,8 @@ export class Notification {
     this._id = id ?? randomUUID()
     this.props = {
       ...props,
-      createAt: props.createAt ?? new Date()
+      createAt: props.createAt ?? new Date(),
+      discordNotified: false
     }
   }
 
@@ -72,5 +75,21 @@ export class Notification {
 
   public get content(): Content {
     return this.props.content
+  }
+
+  public get discordId(): string | undefined | null {
+    return this.props.discordId
+  }
+
+  public set discordId(discordId: string | undefined | null) {
+    this.props.discordId = discordId
+  }
+
+  public get discordNotified(): boolean {
+    return this.props.discordNotified || false
+  }
+
+  public discordNotify() {
+    this.props.discordNotified = true
   }
 }

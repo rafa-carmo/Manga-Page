@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsUUID, Length } from 'class-validator'
+import { IsNotEmpty, IsString, IsUUID, Length } from 'class-validator'
 
 export class CreateNotificationBody {
   @IsNotEmpty()
@@ -14,4 +14,8 @@ export class CreateNotificationBody {
 
   @IsNotEmpty()
   chapter: string
+
+  @IsString()
+  @Length(5, 240)
+  discordId: string
 }

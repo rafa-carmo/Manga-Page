@@ -7,13 +7,17 @@ import { NotificationViewModel } from '../view-models/notification-view-model'
 import { GetRecipientNotifications } from '@application/use-cases/get-recipient-notifications'
 import { GetPublicKey } from '@application/use-cases/get-public-key-push-notification'
 import { CreateSubscriptionNotificationUrl } from '@application/use-cases/create-subscription-notification'
+import { GetDiscordUnreceivedNotifications } from '@application/use-cases/get-discord-unreceived-notifications-by-recipient-id'
+import { DiscordReceivedNotification } from '../../../application/use-cases/discord-received-notification'
 
 @Controller('/notifications')
 export class NotificationsController {
   constructor(
     private verifyHasNotifications: VerifyHasNotifications,
     private sendNotification: SendNotification,
-    private getRecipientNotifications: GetRecipientNotifications
+    private getRecipientNotifications: GetRecipientNotifications,
+    private getDiscordUnreceivedNotifications: GetDiscordUnreceivedNotifications,
+    private discordReceivedNotifications: DiscordReceivedNotification
   ) {}
 
   @Get('/from/:recipientId')
@@ -32,15 +36,26 @@ export class NotificationsController {
     return notifications.map(NotificationViewModel.toHttp)
   }
 
+  @Get('/discord/all')
+  async getDiscordLastNotifications() {
+    const notifications = await this.getDiscordUnreceivedNotifications.execute()
+    return notifications.map(NotificationViewModel.toHttp)
+  }
+
+  @Get('/discord/receive')
+  async receivedAllNotifications() {
+    await this.discordReceivedNotifications.execute()
+  }
   @Post()
   async create(@Body() body: CreateNotificationBody) {
-    const { recipientId, content, chapter, mangaSlug } = body
+    const { recipientId, content, chapter, mangaSlug, discordId } = body
 
     const { notification } = await this.sendNotification.execute({
       recipientId,
       content: new Content(content),
       chapter,
-      mangaSlug
+      mangaSlug,
+      discordId
     })
     return { notification: NotificationViewModel.toHttp(notification) }
   }
